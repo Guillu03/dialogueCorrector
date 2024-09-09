@@ -1,14 +1,11 @@
 import { DocumentData, DocumentReference } from "firebase/firestore";
 import { OpenAIMessageDTO } from "./OpenAIDTO";
-import { QuestionDTO } from "./QuestionDTO";
+import { LanguageCode } from "../types/languageCode";
 
 export interface UserDTO {
   docRef?: DocumentReference<DocumentData, DocumentData> | null; // docRef for the user document
   pseudonym: string;
+  language: LanguageCode;
   messages: OpenAIMessageDTO[];
-  userAnswersToInitialQuestionnaire: QuestionDTO[];
-  userAnswersToFinalQuestionnaire: QuestionDTO[];
-  gptAnswersToEmotionalQuestionnaire: QuestionDTO[];
-  gptAnswersToEmpathyQuestionnaire: QuestionDTO[];
   timestamp: string;
 }

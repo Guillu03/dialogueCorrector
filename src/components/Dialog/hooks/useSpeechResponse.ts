@@ -5,15 +5,21 @@ import {
   VoiceRootState,
   setProcessingUserRequest,
 } from "../../../shared/redux/slices/voiceSlice";
+import { UserDBRootState } from "../../../shared/redux/slices/userDBSlice";
+import useLanguage from "../../../shared/hooks/useLanguage";
 
 const useSpeechResponse = () => {
   // Global variables
   const voiceAPIStatus = useSelector(
     (state: VoiceRootState) => state.voiceState?.voiceAPIStatus
   );
+  const userLanguageCode = useSelector(
+    (state: UserDBRootState) => state.userDBState.userData.language
+  );
 
   // Custom and React Hooks
   const dispatch = useDispatch();
+  const { getLanguageObjectByCode } = useLanguage();
 
   // App Context Data
   const { printDebug, sendTextToAlexa } = useContext(AlexaContext);
@@ -28,7 +34,14 @@ const useSpeechResponse = () => {
   };
 
   const formattingAlexaResponse = (_response: string) => {
-    let formatedResponse = `<voice name='Lucia'>`;
+    const languageObject = getLanguageObjectByCode(userLanguageCode);
+
+    printDebug("Voice => " + languageObject?.voice);
+
+    let formatedResponse = `<voice name="${
+      languageObject?.voice ? languageObject.voice : "Lucia"
+    }">
+    `;
     formatedResponse += _response;
     formatedResponse += `</voice>`;
 

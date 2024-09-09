@@ -18,6 +18,8 @@ import Button from "../../shared/components/Button";
 import useDialogController from "./useDialogController";
 import useTest1 from "./__tests__/useTest";
 import useTest2 from "../../shared/hooks/tests/useTest";
+import CorrectionsView from "./components/Corrections";
+import Speech from "./components/Speech";
 
 /**
  * Generic view of a menu
@@ -25,69 +27,35 @@ import useTest2 from "../../shared/hooks/tests/useTest";
  * @param MenuProps
  * @returns MenuView
  */
-const DialogView: React.FC = () => {
+const DialogView = () => {
   /* View Controller */
-  const { isLoading, isSpeechOn, isDialogBlocked, handleOnTouchStartEvent } =
-    useDialogController();
+  const {
+    messages,
+    seeCorrectionsEnabled,
+    isLoading,
+    isSpeechOn,
+    handleOnTouchStartEvent,
+    handleSeeCorrectionsOnTouchEvent,
+    setSeeCorretionsEnabled,
+  } = useDialogController();
   //useTest1();
   //useTest2();
 
   return (
     <>
-      <div className="container-fluid" onTouchStart={handleOnTouchStartEvent}>
-        <div className="container-menu">
-          <div className="grid-container">
-            {isSpeechOn ? (
-              <div className="grid-item item-avatar">
-                <img
-                  src={MAIN_IMAGES.avatarSpeakingIcon.imageSrc}
-                  alt={MAIN_IMAGES.avatarSpeakingIcon.imageAlt}
-                  className="d-inline-block align-center"
-                />
-              </div>
-            ) : (
-              <div className="grid-item item-avatar">
-                <img
-                  src={MAIN_IMAGES.avatarNotSpeakingIcon.imageSrc}
-                  alt={MAIN_IMAGES.avatarNotSpeakingIcon.imageAlt}
-                  className="d-inline-block align-center"
-                />
-              </div>
-            )}
-            <div className="grid-item item-input-wrapper-menu-view">
-              {isLoading ? (
-                <div className="grid-item item-icon-load-alexa-loading-view">
-                  <img
-                    src={MAIN_IMAGES.loadingIcon.imageSrc}
-                    alt={MAIN_IMAGES.loadingIcon.imageAlt}
-                    className="d-inline-block align-center"
-                  />
-                </div>
-              ) : isDialogBlocked ? (
-                <div className="grid-item item-waiting-text-alexa-loading-view item-waiting-text-alexa-loading-view-animation">
-                  Guardando datos. Por favor, espere un momento...
-                </div>
-              ) : (
-                <InputGroup size="lg" className="mb-3">
-                  <Form.Control
-                    placeholder="¿En qué te puedo ayudar?"
-                    aria-label="¿En qué te puedo ayudar?"
-                    aria-describedby="basic-addon2"
-                  />
-                  <Button
-                    id="save-debug-btn"
-                    path=""
-                    classStyle=""
-                    type="submit"
-                  >
-                    Enviar
-                  </Button>
-                </InputGroup>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+      {seeCorrectionsEnabled ? (
+        <CorrectionsView
+          messages={messages}
+          setSeeCorrectionsEnabled={setSeeCorretionsEnabled}
+        />
+      ) : (
+        <Speech
+          isLoading={isLoading}
+          isSpeechOn={isSpeechOn}
+          handleOnTouchStartEvent={handleOnTouchStartEvent}
+          handleSeeCorrectionsOnTouchEvent={handleSeeCorrectionsOnTouchEvent}
+        />
+      )}
     </>
   );
 };

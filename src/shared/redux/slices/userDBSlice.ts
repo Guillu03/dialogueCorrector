@@ -8,9 +8,9 @@
  ************************************************************************************************************/
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { UserDTO } from "../../dtos/UserDTO";
-import { QuestionDTO } from "../../dtos/QuestionDTO";
 import { OpenAIMessageDTO } from "../../dtos/OpenAIDTO";
 import { DocumentData, DocumentReference } from "firebase/firestore";
+import { LanguageCode } from "../../types/languageCode";
 
 // Interface with the structure of the global state (must be the same as the reducer definition)
 export interface UserDBRootState {
@@ -29,11 +29,8 @@ const initialState: UserDBState = {
   userData: {
     docRef: null,
     pseudonym: "",
-    userAnswersToInitialQuestionnaire: [],
+    language: "es",
     messages: [],
-    userAnswersToFinalQuestionnaire: [],
-    gptAnswersToEmotionalQuestionnaire: [],
-    gptAnswersToEmpathyQuestionnaire: [],
     timestamp: "",
   },
 };
@@ -57,35 +54,17 @@ export const userDBSlice = createSlice({
     setUserPseudonym: (state: UserDBState, action: PayloadAction<string>) => {
       state.userData.pseudonym = action.payload;
     },
-    setUserAnswersToInitialQuestionnaire: (
+    setUserLanguage: (
       state: UserDBState,
-      action: PayloadAction<QuestionDTO[]>
+      action: PayloadAction<LanguageCode>
     ) => {
-      state.userData.userAnswersToInitialQuestionnaire = action.payload;
+      state.userData.language = action.payload;
     },
     addMessage: (
       state: UserDBState,
       action: PayloadAction<OpenAIMessageDTO>
     ) => {
       state.userData.messages.push(action.payload);
-    },
-    setUserAnswersToFinalQuestionnaire: (
-      state: UserDBState,
-      action: PayloadAction<QuestionDTO[]>
-    ) => {
-      state.userData.userAnswersToFinalQuestionnaire = action.payload;
-    },
-    setGPTAnswersToEmotionalQuestionnaire: (
-      state: UserDBState,
-      action: PayloadAction<QuestionDTO[]>
-    ) => {
-      state.userData.gptAnswersToEmotionalQuestionnaire = action.payload;
-    },
-    setGPTAnswersToEmpathyQuestionnaire: (
-      state: UserDBState,
-      action: PayloadAction<QuestionDTO[]>
-    ) => {
-      state.userData.gptAnswersToEmpathyQuestionnaire = action.payload;
     },
     setTimestamp: (state: UserDBState, action: PayloadAction<string>) => {
       state.userData.timestamp = action.payload;
@@ -99,9 +78,8 @@ export const userDBSlice = createSlice({
 export const {
   setUserDocRef,
   setUserPseudonym,
-  setUserAnswersToInitialQuestionnaire,
+  setUserLanguage,
   addMessage,
-  setUserAnswersToFinalQuestionnaire,
   setTimestamp,
   resetUserData,
 } = userDBSlice.actions;

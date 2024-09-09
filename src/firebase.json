@@ -1,8 +1,8 @@
 {
-  "DB_API_KEY": "AIzaSyA80OTFum1Ulqj5CPtDPw59IE2KYgjOaFE",
-  "DB_AUTH_DOMAIN": "amigoaislamiento-5d964.firebaseapp.com",
-  "DB_PROJECT_ID": "amigoaislamiento-5d964",
-  "DB_STORAGE_BUCKET": "amigoaislamiento-5d964.appspot.com",
-  "DB_MESSAGING_SENDER_ID": "340136960061",
-  "DB_APP_ID": "1:340136960061:web:a29d79ac9d177be2248a54"
+  "DB_API_KEY": "AIzaSyA7K4iBtMY9QYK81wWEAEOo5CXaqDv3XaM",
+  "DB_AUTH_DOMAIN": "dialoguecorrector.firebaseapp.com",
+  "DB_PROJECT_ID": "dialoguecorrector",
+  "DB_STORAGE_BUCKET": "dialoguecorrector.appspot.com",
+  "DB_MESSAGING_SENDER_ID": "267956715419",
+  "DB_APP_ID": "1:267956715419:web:55a730f6474b444ba26b3e"
 }

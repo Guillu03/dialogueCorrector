@@ -30,7 +30,7 @@ const MainView: React.FC = () => {
   /* Navbar properties */
   const navBarProps = {
     navBrand: {
-      name: "Tu Amiga Virtual",
+      name: "Corrector diálogo",
     },
     navBtns: [
       {
@@ -38,14 +38,11 @@ const MainView: React.FC = () => {
         icon: faArrowLeft,
         path: "/startMenu",
       },
-      /*
-      TODO: Eliminar comentarios para poder ver la ventana de Debug
       {
         name: "debug-btn",
         icon: faCode,
         path: "/debug",
       },
-      */
     ],
     disableNavButton: false,
   };

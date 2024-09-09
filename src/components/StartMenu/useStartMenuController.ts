@@ -5,14 +5,17 @@ import {
   UserDBRootState,
   resetUserData,
   setUserDocRef,
+  setUserLanguage,
 } from "../../shared/redux/slices/userDBSlice";
 import useFirebaseDBModel from "../../shared/hooks/useFirebaseDBModel";
 import { AlexaContext } from "../../App";
 import { useGeneratePseudonym } from "../../shared/utils/useGeneratePseudonym";
 import { resetOpenAIState } from "../../shared/redux/slices/openAISlice";
+import { LanguageCode } from "../../shared/types/languageCode";
 
 const useStartMenuController = () => {
   const [pseudonym, setPseudonym] = useState<string>();
+  const [language, setLanguage] = useState<LanguageCode>();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -31,6 +34,11 @@ const useStartMenuController = () => {
     setPseudonym(event.target.value);
   };
 
+  const handleChangeOnLanguageInput = (event: any) => {
+    console.log("+++ Language Value +++ => " + event.target.value);
+    setLanguage(event.target.value);
+  };
+
   const handleIsStartButtonDisabled = useCallback(() => {
     if (!pseudonym) {
       setIsDisabled(true);
@@ -47,10 +55,14 @@ const useStartMenuController = () => {
 
     printDebug("+++ Pseudonym => " + pseudonym);
     printDebug("+++ userPseudonym => " + userPseudonym);
+    printDebug("+++ userLanguage => " + language);
 
-    if (userPseudonym) {
+    if (userPseudonym && language) {
+      dispatch(setUserLanguage(language));
+
       let userDataUpdated = { ...userData };
       userDataUpdated.pseudonym = userPseudonym;
+      userDataUpdated.language = language;
       userDataUpdated.timestamp = new Date().toLocaleString();
 
       await addUserToFirebaseDB(userDataUpdated)
@@ -83,9 +95,11 @@ const useStartMenuController = () => {
   }, [handleIsStartButtonDisabled]);
 
   return {
+    language,
     isDisabled,
     isLoading,
     handleChangeOnPseudonymInput,
+    handleChangeOnLanguageInput,
     handleStartButtonClick,
   };
 };

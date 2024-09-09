@@ -20,7 +20,7 @@ const StartAppView: React.FC = () => {
       <div className="container-fluid">
         <div className="container-menu-start-app-view">
           <div className="grid-container-start-app-view">
-            <div className="item-logo-start-app-view">Tu Amiga Virtual</div>
+            <div className="item-logo-start-app-view">Corrector diálogo v4</div>
             <div className="item-button-start-app-view">
               <Button
                 id="start"

@@ -16,22 +16,17 @@ import { AlexaContext } from "../../App";
 import { VoiceAPIStatus } from "../../shared/enums/VoiceAPIStatus";
 import { VoiceMsgStatus } from "../../shared/enums/VoiceMsgStatus";
 import useUserGeneralInput from "./hooks/useUserGeneralInput";
-import useQuestionnaire from "./hooks/useQuestionnaire";
 import { OpenAIRootState } from "../../shared/redux/slices/openAISlice";
-import useFirebaseDBModel from "../../shared/hooks/useFirebaseDBModel";
 import useSpeechResponse from "./hooks/useSpeechResponse";
-import { useNormalizeString } from "../../shared/utils/useNormalizeString";
-import useTest from "./__tests__/useTest";
+import { UserDBRootState } from "../../shared/redux/slices/userDBSlice";
+import useLanguage from "../../shared/hooks/useLanguage";
 
 const useDialogController = () => {
-  // CONSTANS
-  const START_SPEECH = `<voice name='Lucia'><amazon:emotion name="excited" intensity="high"> 
-     ¡Hola! Mi nombre es Alexa. ¿Qué es lo que te gustaría decirme? </amazon:emotion><break strength='strong'/></voice>`;
-
   // Local variables
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isSpeechOn, setIsSpeechOn] = useState<boolean>(false);
-  const [isDialogBlocked, setIsDialogBlocked] = useState<boolean>(false);
+  const [seeCorrectionsEnabled, setSeeCorretionsEnabled] =
+    useState<boolean>(false);
 
   // Global variables
   const voiceAPIStatus = useSelector(
@@ -49,6 +44,9 @@ const useDialogController = () => {
   const userRequest = useSelector(
     (state: VoiceRootState) => state.voiceState?.data?.userRequest
   );
+  const userLanguageCode = useSelector(
+    (state: UserDBRootState) => state.userDBState.userData.language
+  );
   const contextTokensTotal = useSelector(
     (state: OpenAIRootState) => state.openAIState.contextTokensTotal
   );
@@ -59,20 +57,8 @@ const useDialogController = () => {
   // Custom and React Hooks
   const dispatch = useDispatch();
   const { handleAnswerToGeneralUserInput } = useUserGeneralInput();
-  const {
-    hasQuestionnaireStarted,
-    setHasQuestionnaireStarted,
-    handleStartInitialQuestionnaire,
-    handleStartFinalQuestionnaire,
-    handleAnswerToQuestionnaire,
-    handleGPTAnswersToEmpathyQuestionnaire,
-    handleGPTAnswersToEmotionalQuestionnaire,
-  } = useQuestionnaire(setIsDialogBlocked);
-  const { addUserToFirebaseDB } = useFirebaseDBModel();
   const { speechResponseToUserRequest } = useSpeechResponse();
-
-  //FIXME: eliminar
-  //useTest();
+  const { getGreetingsWithSSML } = useLanguage();
 
   // App Context Data
   const { printDebug } = useContext(AlexaContext);
@@ -99,7 +85,10 @@ const useDialogController = () => {
   }, [voiceMsgProps]);
 
   const sayStartSpeech = useCallback(() => {
-    speechResponseToUserRequest(START_SPEECH, "time-for-general-requests");
+    speechResponseToUserRequest(
+      getGreetingsWithSSML(userLanguageCode),
+      "time-for-general-requests"
+    );
   }, [voiceAPIStatus]);
 
   /**
@@ -109,35 +98,6 @@ const useDialogController = () => {
     printDebug(`+++ INSIDE handleVoiceAPIIntents() +++ `);
     printDebug(`+++ VOICE API STATUS => ${voiceAPIStatus} `);
     printDebug(`+++ INTENT TYPE => ${intentType} `);
-
-    /**
-     * TODO: Eliminar comentarios si se quiere permitir rellenar cuestionarios automáticamente.
-     *          También se deberá comentar el if de abajo ya que se encuentra incluido en este fragmento de código.
-     * 
-    if (intentType === "conversation-intent") {
-      const normalizedUserRequest = useNormalizeString(userRequest);
-
-      if (normalizedUserRequest.includes("cuestionario inicial")) {
-        handleStartInitialQuestionnaire();
-      } else if (normalizedUserRequest.includes("cuestionario final")) {
-        handleStartFinalQuestionnaire();
-      } else if (
-        normalizedUserRequest.includes("cuestionario automatico emociones")
-      ) {
-        //Enviar a GPT cuestionario de emociones para rellenar automáticamente
-        await handleGPTAnswersToEmotionalQuestionnaire();
-      } else if (
-        normalizedUserRequest.includes("cuestionario automatico empatia")
-      ) {
-        //Enviar a GPT cuestionario de empatía para rellenar automáticamente
-        await handleGPTAnswersToEmpathyQuestionnaire();
-      } else if (hasQuestionnaireStarted) {
-        await handleAnswerToQuestionnaire(userRequest);
-      } else {
-        await handleAnswerToGeneralUserInput(userRequest);
-      }
-    } 
-    */
 
     if (intentType === "conversation-intent") {
       await handleAnswerToGeneralUserInput(userRequest, messages);
@@ -150,10 +110,13 @@ const useDialogController = () => {
     stopAlexaSpeech();
   };
 
+  const handleSeeCorrectionsOnTouchEvent = () => {
+    setSeeCorretionsEnabled(true);
+  };
+
   const stopAlexaSpeech = () => {
     printDebug("+++ INSIDE prepareForUserGeneralRequest - touch event +++");
     speechResponseToUserRequest("", "no-reprompt");
-    setHasQuestionnaireStarted(false);
     setIsLoading(false);
     setIsSpeechOn(false);
   };
@@ -197,7 +160,15 @@ const useDialogController = () => {
     );
   }, [contextTokensTotal]);
 
-  return { isLoading, isSpeechOn, isDialogBlocked, handleOnTouchStartEvent };
+  return {
+    messages,
+    seeCorrectionsEnabled,
+    isLoading,
+    isSpeechOn,
+    handleOnTouchStartEvent,
+    handleSeeCorrectionsOnTouchEvent,
+    setSeeCorretionsEnabled,
+  };
 };
 
 export default useDialogController;

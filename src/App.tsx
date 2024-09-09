@@ -14,6 +14,7 @@ import DebugView from "./components/Debug";
 import useAlexaWrapper from "./shared/hooks/useAlexaWrapper";
 import useFirebase from "./api/firebase/useFirebase";
 import StartMenuView from "./components/StartMenu";
+import CorrectionsView from "./components/Dialog/components/Corrections";
 
 // Export Context
 export const FirebaseContext = React.createContext<any>({});

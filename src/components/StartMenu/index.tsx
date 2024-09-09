@@ -14,6 +14,7 @@ import Spinner from "react-bootstrap/Spinner";
 import "./start-menu.css";
 import useStartMenuController from "./useStartMenuController";
 import Button from "react-bootstrap/Button";
+import { LANGUAGES } from "../../shared/constants/languages";
 
 /**
  * View with application's progress
@@ -21,10 +22,14 @@ import Button from "react-bootstrap/Button";
  * @returns OptionsView
  */
 const StartMenuView: React.FC = () => {
+  const languageList = LANGUAGES;
+
   const {
+    language,
     isDisabled,
     isLoading,
     handleChangeOnPseudonymInput,
+    handleChangeOnLanguageInput,
     handleStartButtonClick,
   } = useStartMenuController();
 
@@ -66,6 +71,34 @@ const StartMenuView: React.FC = () => {
                         />
                       </Form.Group>
                     </Form>
+                  </Col>
+                </Row>
+                <br />
+                <Row>
+                  <Col
+                    xs={2}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <div style={{ color: "red" }}>*</div>
+                    Idioma
+                  </Col>
+                  <Col>
+                    <Form.Select
+                      aria-label="Default select example"
+                      value={language}
+                      onChange={handleChangeOnLanguageInput}
+                    >
+                      <option value="-1">Selecciona un idioma</option>
+                      {languageList.map((language) => (
+                        <option key={language.code} value={language.code}>
+                          {language.name}
+                        </option>
+                      ))}
+                    </Form.Select>
                   </Col>
                 </Row>
               </Container>
