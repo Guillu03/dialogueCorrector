@@ -1,0 +1,60 @@
+/************************************************************************************************************
+ *                                                                                                          *
+ * File: start-app-view.css                                                                                 *
+ * Author: Adnana Catrinel Dragut                                                                           *
+ * Description: CSS with the style of the Start App View                                                    *
+ * Version: 1.1                                                                                             *
+ *                                                                                                          *
+ ************************************************************************************************************/
+
+.container-menu-start-app-view {
+  height: 100%;
+  padding: 1em;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  background-color: #fff3cf;
+}
+
+.grid-container-start-app-view {
+  display: grid;
+  /* The rows takes up one fraction of the grid */
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 0.3fr;
+  gap: 5px;
+  width: 100%;
+}
+
+.item-logo-start-app-view {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: 800;
+  font-size: 90px;
+}
+
+.item-button-start-app-view {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  display: flex;
+  align-self: center;
+  justify-self: center;
+  height: 70%;
+  width: 50%;
+  position: relative;
+  overflow: hidden;
+}

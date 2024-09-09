@@ -1,0 +1,124 @@
+/************************************************************************************************************
+ *                                                                                                          *
+ * File: main.module.css                                                                                    *
+ * Author: Adnana Catrinel Dragut                                                                           *
+ * Description: CSS with the style of the Main View                                                         *
+ * Version: 1.1                                                                                             *
+ *                                                                                                          *
+ ************************************************************************************************************/
+
+.container-menu {
+  /* Defines a fixed height for the container and substracts the space occupied by the navigation bar and the footer */
+  height: calc(100vh - 160px);
+  padding: 1em;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  margin-top: 80px;
+}
+
+.grid-container {
+  display: grid;
+  /* The cols takes up one fraction of the grid */
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 0.5fr 0.8fr;
+  grid-auto-rows: 100px;
+  gap: 5px;
+  width: 100%;
+}
+
+.grid-item {
+  font-size: 5vh;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-avatar {
+  grid-column-start: 1;
+  grid-column-end: 6;
+  grid-row-start: 1;
+  grid-row-end: 4;
+  background-color: #0b60b0;
+  border-radius: 10%;
+  width: 40%;
+  height: 100%;
+  display: flex;
+  justify-self: center;
+  align-items: center;
+  border: 5px solid;
+}
+
+.item-avatar img {
+  /* Ensures that the image is contained within the container */
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+  margin: 0;
+  padding: 0;
+  border-radius: 50%;
+}
+
+.item-button {
+  font-size: 4vh !important;
+  font-weight: bold !important;
+  width: 100%;
+  height: 100%;
+}
+
+.item-input-wrapper-menu-view {
+  grid-column-start: 1;
+  grid-column-end: 5;
+  grid-row-start: 4;
+  grid-row-end: 5;
+  display: flex;
+  align-items: end;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.item-icon-load-alexa-loading-view {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.item-waiting-text-alexa-loading-view {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  font-weight: bold;
+}
+
+.item-waiting-text-alexa-loading-view-animation {
+  font-family: monospace;
+  font-size: 30px;
+  clip-path: inset(0 3ch 0 0);
+  animation: l 2s steps(4) infinite;
+}
+
+@keyframes l {
+  to {
+    clip-path: inset(0 -1ch 0 0);
+  }
+}

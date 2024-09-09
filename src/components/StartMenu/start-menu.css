@@ -1,0 +1,50 @@
+/************************************************************************************************************
+ *                                                                                                          *
+ * File: start-menu.css                                                                                     *
+ * Author: Adnana Catrinel Dragut                                                                           *
+ * Description: CSS with the style of the Options View                                                      *
+ * Version: 1.1                                                                                             *
+ *                                                                                                          *
+ ************************************************************************************************************/
+
+.container-menu-start-menu-view {
+  height: 100%;
+  padding: 1em;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  background-color: #fff3cf;
+}
+
+.grid-container-start-menu-view {
+  display: grid;
+  /* The rows takes up one fraction of the grid */
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 0.4fr;
+  width: 100%;
+}
+
+.item-start-menu-view {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+}
+
+.item-button-start-menu-view {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 3;
+  display: flex;
+  align-self: center;
+  justify-self: center;
+  height: 50%;
+  width: 50%;
+  position: relative;
+  overflow: hidden;
+}

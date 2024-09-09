@@ -1,0 +1,57 @@
+/************************************************************************************************************
+ *                                                                                                          *
+ * File: footer.module.css                                                                                  *
+ * Author: Adnana Catrinel Dragut                                                                           *
+ * Description: CSS with the style of the Footer                                                            *
+ * Version: 1.1                                                                                             *
+ *                                                                                                          *
+ ************************************************************************************************************/
+
+.footer-wrapper {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-custom {
+  background-color: #fff3cf;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.row {
+  height: 100%;
+}
+
+.footer-custom .container-fluid {
+  height: 100%;
+  width: 100%;
+}
+
+.footer-custom .icon,
+.footer-custom .text {
+  font-family: "Poppins", sans-serif;
+  font-style: normal !important;
+  font-size: 5vh !important;
+  display: flex;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.footer-custom .icon {
+  color: #0b60b0;
+  justify-content: center;
+}
+
+.footer-custom .text {
+  color: black;
+  justify-content: left;
+  font-weight: bold !important;
+}

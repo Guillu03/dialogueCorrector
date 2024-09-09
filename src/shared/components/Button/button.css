@@ -1,0 +1,18 @@
+/************************************************************************************************************
+ *                                                                                                          *
+ * File: button.styles.css                                                                                  *
+ * Author: Adnana Catrinel Dragut                                                                           *
+ * Description: CSS with the style of the buttons used in the application                                   *
+ * Version: 1.1                                                                                             *
+ *                                                                                                          *
+ ************************************************************************************************************/
+
+/* Normal button style */
+.btn {
+  border: 0 !important;
+}
+
+.btn-active-color {
+  color: white !important;
+  background-color: #0b60b0 !important;
+}

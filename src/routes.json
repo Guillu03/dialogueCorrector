@@ -1,0 +1,7 @@
+{
+  "START_APP_ROUTE": "/",
+  "BASE_ROUTE": "/dialogueCorrector",
+  "START_MENU_ROUTE": "/startMenu",
+  "DIALOG_ROUTE": "/dialog",
+  "DEBUG_ROUTE": "/debug"
+}

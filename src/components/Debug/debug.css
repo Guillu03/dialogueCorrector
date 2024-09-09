@@ -1,0 +1,130 @@
+.debug-container {
+  height: calc(100vh - 80px);
+  left: 0;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  display: flex;
+  margin-top: 80px;
+  position: fixed;
+}
+
+.debug-show-data-container {
+  left: 0;
+  bottom: 0;
+  right: 0;
+  top: 0;
+  height: calc(100vh - 80px);
+  margin-top: 80px;
+  padding: 10px;
+  position: fixed;
+  overflow-y: scroll;
+  background-color: black;
+  width: 100%;
+}
+
+.debug-container-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr 0.2fr;
+  width: 100%;
+  background-color: rgb(170, 102, 234);
+}
+
+.debug-container-grid-item-traza {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+  width: 100%;
+  font-size: 14px;
+  font-family: "Courier New", Courier, monospace;
+  white-space: pre;
+  color: #fff;
+  background-color: black;
+  border: 1px solid #aaa;
+  padding: 20px;
+  line-height: 16px;
+  overflow-y: scroll;
+}
+
+.debug-container-grid-item-input-btns {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 2;
+  grid-row-end: 3;
+
+  display: grid;
+  grid-template-columns: 1fr 0.1fr 0.8fr 0.7fr;
+  grid-template-rows: 1fr;
+  border: 5px solid;
+  padding: 10px;
+}
+
+.debug-container-grid-item-input-field {
+  grid-column-start: 1;
+  grid-column-end: 2;
+  grid-row-start: 1;
+  grid-row-end: 2;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.debug-container-grid-item-input-field .input-group-text {
+  background-color: black;
+  color: white;
+  font-weight: bold;
+  border-color: black;
+  font-size: 3.5vh !important;
+}
+
+.debug-container-grid-item-save-button {
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 1;
+  grid-row-end: 2;
+
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+
+.debug-container-grid-item-save-button button {
+  font-weight: bold !important;
+  font-size: 3.5vh !important;
+}
+
+.debug-container-grid-item-show-button {
+  grid-column-start: 3;
+  grid-column-end: 4;
+  grid-row-start: 1;
+  grid-row-end: 2;
+
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+
+.debug-container-grid-item-show-button button {
+  font-weight: bold !important;
+  font-size: 3.5vh !important;
+}
+
+.debug-container-grid-item-clear-button {
+  grid-column-start: 3;
+  grid-column-end: 5;
+  grid-row-start: 1;
+  grid-row-end: 2;
+
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+}
+
+.debug-container-grid-item-clear-button button {
+  font-weight: bold !important;
+  font-size: 3.5vh !important;
+}

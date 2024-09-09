@@ -1,0 +1,23 @@
+/************************************************************************************************************
+ *                                                                                                          *
+ * File: index.css                                                                                          *
+ * Author: Adnana Catrinel Dragut                                                                           *
+ * Description: CSS with the style of the general aspects of the web application                            *
+ * Version: 1.1                                                                                             *
+ *                                                                                                          *
+ ************************************************************************************************************/
+
+* {
+  margin: 0;
+  padding: 0;
+  font-family: "Popins", sans-serif;
+}
+
+body {
+  padding: 5vh 5vw;
+  font-size: 4vh;
+  min-height: 590px;
+  max-width: 970px;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
