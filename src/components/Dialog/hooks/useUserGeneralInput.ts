@@ -18,7 +18,7 @@ const useUserGeneralInput = () => {
               Asegúrate de adaptar el nivel de complejidad del diálogo al nivel de competencia del usuario: ${_level}, 
               proporcionando una comunicación adecuada y comprensible que fomente la práctica efectiva y progresiva.
               
-              Solamente deberás utilizar texto en tu respuesta, no deberás usar emojis ni caritas ni ningún otro elemento visual.
+              Debes ofrecer respuestas solamente en el idioma ${_language}.
               
               Instrucciones:
                 1. Deberás ser siempre proactivo haciendo que el usuario hable.

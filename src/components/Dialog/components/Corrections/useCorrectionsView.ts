@@ -41,6 +41,9 @@ const useCorrectionsView = (
         getLanguageObjectByKey(languageKey)?.name
       } y el nivel ${getLanguageLevelObjectByKey(levelKey)?.name}.
       Necesito que realices una corrección de las entradas del usuario del siguiente diálogo ${_messages}. 
+      Necesito que corrijas todas las entradas del usuario, teniendo en cuenta que el idioma hablado ha sido el  ${
+        getLanguageObjectByKey(languageKey)?.name
+      }.
       Deberás separar por categorías los errores más importantes cometidos por el usuario durante la conversación. 
       Para cada error detectado, deberás devolver la categoría de error cometido, la frase del usuario completa con el error cometido, 
       una explicación del error cometido y un ejemplo de cómo sería la frase corregida. 
@@ -70,13 +73,8 @@ const useCorrectionsView = (
     const responseObject = JSON.parse(artificialIntelligenceResponse);
 
     printDebug(
-      `+++ getUserEmotionalAnalysis() - responseObject => ${JSON.stringify(
-        responseObject
-      )} `
-    );
-    printDebug(
-      `+++ getUserEmotionalAnalysis() - emotion => ${JSON.stringify(
-        responseObject.corrections
+      `+++ getUserCorrections() - responseObject => ${JSON.stringify(
+        _messages
       )} `
     );
 
@@ -91,9 +89,10 @@ const useCorrectionsView = (
   useEffect(() => {
     const fetchCorrections = async () => {
       try {
-        if (getNumberOfMessagesWithRoleUser(messages) > 3) {
+        const userMessages = getNumberOfMessagesWithRoleUser(messages);
+        if (userMessages.length > 3) {
           setMessagesSufficientForCorrection(true);
-          const retrievedCorrections = await getUserCorrections(messages);
+          const retrievedCorrections = await getUserCorrections(userMessages);
           setCorrections(retrievedCorrections);
         } else {
           setMessagesSufficientForCorrection(false);
@@ -109,7 +108,7 @@ const useCorrectionsView = (
   const getNumberOfMessagesWithRoleUser = (_messages: OpenAIMessageDTO[]) => {
     // Filtrar mensajes que tienen role "user".
     const userMessages = _messages.filter((message) => message.role === "user");
-    return userMessages.length;
+    return userMessages;
   };
 
   useEffect(() => {
