@@ -15,6 +15,7 @@ import "./start-menu.css";
 import useStartMenuController from "./useStartMenuController";
 import Button from "react-bootstrap/Button";
 import { LANGUAGES } from "../../shared/constants/languages";
+import { LEVELS } from "../../shared/constants/levels";
 
 /**
  * View with application's progress
@@ -23,13 +24,16 @@ import { LANGUAGES } from "../../shared/constants/languages";
  */
 const StartMenuView: React.FC = () => {
   const languageList = LANGUAGES;
+  const languageLevels = LEVELS;
 
   const {
     language,
+    level,
     isDisabled,
     isLoading,
     handleChangeOnPseudonymInput,
     handleChangeOnLanguageInput,
+    handleChangeOnLevelInput,
     handleStartButtonClick,
   } = useStartMenuController();
 
@@ -96,6 +100,34 @@ const StartMenuView: React.FC = () => {
                       {languageList.map((language) => (
                         <option key={language.code} value={language.code}>
                           {language.name}
+                        </option>
+                      ))}
+                    </Form.Select>
+                  </Col>
+                </Row>
+                <br />
+                <Row>
+                  <Col
+                    xs={2}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <div style={{ color: "red" }}>*</div>
+                    Nivel
+                  </Col>
+                  <Col>
+                    <Form.Select
+                      aria-label="Default select example"
+                      value={level}
+                      onChange={handleChangeOnLevelInput}
+                    >
+                      <option value="-1">Selecciona un nivel</option>
+                      {languageLevels.map((level) => (
+                        <option key={level.key} value={level.key}>
+                          {level.name}
                         </option>
                       ))}
                     </Form.Select>

@@ -7,8 +7,7 @@
  *                                                                                                          *
  ************************************************************************************************************/
 import { MAIN_IMAGES } from "../../../../shared/constants/images";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
+import "./corrections.css";
 
 // Import Styles
 
@@ -31,7 +30,7 @@ const CorrectionsView: React.FC<CorrectionsViewProps> = ({
   setSeeCorrectionsEnabled,
 }) => {
   /* View Controller */
-  const { corrections } = useCorrectionsView(
+  const { messagesSufficientForCorrection, corrections } = useCorrectionsView(
     messages,
     setSeeCorrectionsEnabled
   );
@@ -39,25 +38,43 @@ const CorrectionsView: React.FC<CorrectionsViewProps> = ({
   return (
     <>
       <div className="container-fluid">
-        <div className="container-menu">
-          <div className="grid-container">
-            {" "}
-            <div>
-              {corrections.length > 0 ? (
-                // Mostrar correcciones si están disponibles
-                <div>{corrections}</div>
-              ) : (
-                // Mostrar el ícono de carga si no hay correcciones
-                <div className="grid-item item-icon-load-alexa-loading-view">
-                  <img
-                    src={MAIN_IMAGES.loadingIcon.imageSrc}
-                    alt={MAIN_IMAGES.loadingIcon.imageAlt}
-                    className="d-inline-block align-center"
-                  />
-                </div>
-              )}
+        <div className="corrections-list-container">
+          {messagesSufficientForCorrection ? (
+            corrections && corrections.length > 0 ? (
+              <div className="corrections-list">
+                {corrections.map((correction: any, index: number) => (
+                  <div key={index} className="correction-message">
+                    <h3>{correction.category}</h3>
+                    <p>
+                      <strong>Error:</strong> {correction.error}
+                    </p>
+                    <p>
+                      <strong>Explicación:</strong> {correction.explanation}
+                    </p>
+                    <p>
+                      <strong>Corrección:</strong> {correction.correction}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid-item item-icon-load-alexa-loading-view">
+                <img
+                  src={MAIN_IMAGES.loadingIcon.imageSrc}
+                  alt={MAIN_IMAGES.loadingIcon.imageAlt}
+                  className="d-inline-block align-center"
+                />
+              </div>
+            )
+          ) : (
+            <div className="correction-insufficient-messages">
+              <h3>
+                <strong>
+                  No hay mensajes suficientes para poder realizar la corrección
+                </strong>
+              </h3>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </>

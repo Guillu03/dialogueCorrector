@@ -6,6 +6,7 @@ export interface UserDTO {
   docRef?: DocumentReference<DocumentData, DocumentData> | null; // docRef for the user document
   pseudonym: string;
   language: LanguageCode;
+  level: number;
   messages: OpenAIMessageDTO[];
   timestamp: string;
 }

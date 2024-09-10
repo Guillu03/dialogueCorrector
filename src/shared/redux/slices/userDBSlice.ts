@@ -30,6 +30,7 @@ const initialState: UserDBState = {
     docRef: null,
     pseudonym: "",
     language: "es",
+    level: 0,
     messages: [],
     timestamp: "",
   },
@@ -60,6 +61,12 @@ export const userDBSlice = createSlice({
     ) => {
       state.userData.language = action.payload;
     },
+    setUserLanguageLevel: (
+      state: UserDBState,
+      action: PayloadAction<number>
+    ) => {
+      state.userData.level = action.payload;
+    },
     addMessage: (
       state: UserDBState,
       action: PayloadAction<OpenAIMessageDTO>
@@ -79,6 +86,7 @@ export const {
   setUserDocRef,
   setUserPseudonym,
   setUserLanguage,
+  setUserLanguageLevel,
   addMessage,
   setTimestamp,
   resetUserData,

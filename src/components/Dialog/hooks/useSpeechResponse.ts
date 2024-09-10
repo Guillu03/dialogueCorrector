@@ -41,9 +41,10 @@ const useSpeechResponse = () => {
     let formatedResponse = `<voice name="${
       languageObject?.voice ? languageObject.voice : "Lucia"
     }">
+    <lang xml:lang='${languageObject?.code ? languageObject.code : "es-ES"}'>
     `;
     formatedResponse += _response;
-    formatedResponse += `</voice>`;
+    formatedResponse += `</lang></voice>`;
 
     return formatedResponse;
   };

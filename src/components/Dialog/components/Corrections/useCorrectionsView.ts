@@ -11,17 +11,23 @@ const useCorrectionsView = (
   setSeeCorrectionsEnabled: any
 ) => {
   //Local variables
-  const [corrections, setCorrections] = useState<string>("");
+  const [corrections, setCorrections] = useState<any>();
+  const [messagesSufficientForCorrection, setMessagesSufficientForCorrection] =
+    useState<boolean>(false);
 
   // Global variables
   const userLanguageCode = useSelector(
     (state: UserDBRootState) => state.userDBState.userData.language
   );
+  const userLanguageLevel = useSelector(
+    (state: UserDBRootState) => state.userDBState.userData.level
+  );
 
   // Custom and React Hooks
   const { getResponseToNewSystemMessageWithoutUpdatingTokens, addMessageToDB } =
     useMessages();
-  const { getLanguageObjectByCode } = useLanguage();
+  const { getLanguageObjectByCode, getLanguageLevelObjectByKey } =
+    useLanguage();
 
   // App Context Data
   const { printDebug } = useContext(AlexaContext);
@@ -31,17 +37,28 @@ const useCorrectionsView = (
   ): Promise<string> => {
     const copyOfResetMessages = [..._messages];
     const systemMessageContent = `
-      En base a la siguiente conversación mantenida con el usuario en el idioma ${
+      En base a una conversación mantenida con el usuario en el idioma ${
         getLanguageObjectByCode(userLanguageCode)?.name
-      } 
-      Necesito que realices una corrección de las entradas del usuario. Separando por categorías
-      los errores más importantes cometidos por el usuario durante la conversación. Para cada error detectado,
-      deberás ofrecer una explicación del error cometido y un ejemplo de cómo sería la frase correcta. 
+      } y el nivel ${getLanguageLevelObjectByKey(userLanguageLevel)?.name}.
+      Necesito que realices una corrección de las entradas del usuario del siguiente diálogo ${_messages}. 
+      Deberás separar por categorías los errores más importantes cometidos por el usuario durante la conversación. 
+      Para cada error detectado, deberás devolver la categoría de error cometido, la frase del usuario completa con el error cometido, 
+      una explicación del error cometido y un ejemplo de cómo sería la frase corregida. 
 
       Responde únicamente con el siguiente JSON con la información solicitada y sin ningún texto adicional:
       {
-        "corrections": <correccionesRealizadas>
+        "corrections": [
+          {
+            "category": "<categoría>",
+            "error": "<error>",
+            "explanation": "<explanation>",
+            "correction": "<correction>",
+          }
+          // Aquí deben ir los demás objetos correspondientes a los errores detectados
+        ]
       }
+
+      En el caso en el que no hayas detectado ningún error en los mensajes deberás devolver el array "corrections" vacío.
     `;
 
     const artificialIntelligenceResponse =
@@ -68,14 +85,19 @@ const useCorrectionsView = (
       JSON.stringify(responseObject.corrections)
     );
 
-    return JSON.stringify(responseObject.corrections);
+    return responseObject.corrections;
   };
 
   useEffect(() => {
     const fetchCorrections = async () => {
       try {
-        const retrievedCorrections = await getUserCorrections(messages);
-        setCorrections(retrievedCorrections);
+        if (getNumberOfMessagesWithRoleUser(messages) > 4) {
+          setMessagesSufficientForCorrection(true);
+          const retrievedCorrections = await getUserCorrections(messages);
+          setCorrections(retrievedCorrections);
+        } else {
+          setMessagesSufficientForCorrection(false);
+        }
       } catch (error) {
         console.error("Error fetching corrections:", error);
       }
@@ -83,6 +105,12 @@ const useCorrectionsView = (
 
     fetchCorrections();
   }, [messages, userLanguageCode]);
+
+  const getNumberOfMessagesWithRoleUser = (_messages: OpenAIMessageDTO[]) => {
+    // Filtrar mensajes que tienen role "user".
+    const userMessages = _messages.filter((message) => message.role === "user");
+    return userMessages.length;
+  };
 
   useEffect(() => {
     // Función de limpieza para ejecutar al desmontar el componente
@@ -94,6 +122,7 @@ const useCorrectionsView = (
 
   return {
     corrections,
+    messagesSufficientForCorrection,
   };
 };
 

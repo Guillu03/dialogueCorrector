@@ -10,12 +10,13 @@ import useLanguage from "../../../shared/hooks/useLanguage";
 
 const useUserGeneralInput = () => {
   // Constants
-  const INITIAL_PROMPT = (_language: string): string => {
+  const INITIAL_PROMPT = (_language: string, _level: string): string => {
     return `
-              Contexto: quiero que actúes como un profesor de idiomas. Tu rol va a ser el de hablar con el usuario
-              sobre diversos temas que tú deberás elegir como profesor. El objetivo es hacer que el usuario hable de manera
-              continuada para conseguir practicar su comunicación en un determinado idioma.
-              El idioma que deberás practicar con el usuario es ${_language}. 
+              Contexto: Quiero que actúes como un profesor de idiomas. 
+              Tu objetivo será conversar con el usuario sobre una variedad de temas que seleccionarás como docente, 
+              orientando la conversación para que el usuario practique de manera continua y mejore su habilidad comunicativa en el idioma ${_language}. 
+              Asegúrate de adaptar el nivel de complejidad del diálogo al nivel de competencia del usuario: ${_level}, 
+              proporcionando una comunicación adecuada y comprensible que fomente la práctica efectiva y progresiva.
               
               Solamente deberás utilizar texto en tu respuesta, no deberás usar emojis ni caritas ni ningún otro elemento visual.
               
@@ -31,11 +32,15 @@ const useUserGeneralInput = () => {
   const userLanguageCode = useSelector(
     (state: UserDBRootState) => state.userDBState.userData.language
   );
+  const userLanguageLevel = useSelector(
+    (state: UserDBRootState) => state.userDBState.userData.level
+  );
 
   // Custom and React Hooks
   const { speechResponseToUserRequest } = useSpeechResponse();
   const { handleUserEmotionalAnalysis } = useUserEmotionalAnalysis();
-  const { getGreetings, getLanguageObjectByCode } = useLanguage();
+  const { getGreetings, getLanguageObjectByCode, getLanguageLevelObjectByKey } =
+    useLanguage();
   const {
     getResponseToNewUserMessage,
     addSystemMessageAndUpdateTokens,
@@ -67,8 +72,8 @@ const useUserGeneralInput = () => {
     handleConversationStart(messagesCopy);
 
     //FIXME: change userEmotion
-    const userEmotion = await handleUserEmotionalAnalysis(messagesCopy);
-    //const userEmotion = "";
+    //const userEmotion = await handleUserEmotionalAnalysis(messagesCopy);
+    const userEmotion = "";
 
     artificialIntelligenceResponse = await getResponseToNewUserMessage(
       _userRequest,
@@ -89,10 +94,16 @@ const useUserGeneralInput = () => {
   const handleConversationStart = (_messages: OpenAIMessageDTO[]) => {
     const languageName =
       getLanguageObjectByCode(userLanguageCode)?.name || "Español";
+    const languageLevel =
+      getLanguageLevelObjectByKey(userLanguageLevel)?.name ||
+      "Nivel Principiante";
     const greetings = getGreetings(userLanguageCode);
 
     if (isConversationStarting(_messages)) {
-      addSystemMessageAndUpdateTokens(INITIAL_PROMPT(languageName), _messages);
+      addSystemMessageAndUpdateTokens(
+        INITIAL_PROMPT(languageName, languageLevel),
+        _messages
+      );
     }
 
     addAssistantMessageAndUpdateTokens(greetings, _messages);

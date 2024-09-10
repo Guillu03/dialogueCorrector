@@ -6,6 +6,7 @@ import {
   resetUserData,
   setUserDocRef,
   setUserLanguage,
+  setUserLanguageLevel,
 } from "../../shared/redux/slices/userDBSlice";
 import useFirebaseDBModel from "../../shared/hooks/useFirebaseDBModel";
 import { AlexaContext } from "../../App";
@@ -16,6 +17,7 @@ import { LanguageCode } from "../../shared/types/languageCode";
 const useStartMenuController = () => {
   const [pseudonym, setPseudonym] = useState<string>();
   const [language, setLanguage] = useState<LanguageCode>();
+  const [level, setLevel] = useState<number>();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -39,6 +41,11 @@ const useStartMenuController = () => {
     setLanguage(event.target.value);
   };
 
+  const handleChangeOnLevelInput = (event: any) => {
+    console.log("+++ Level Value +++ => " + event.target.value);
+    setLevel(event.target.value);
+  };
+
   const handleIsStartButtonDisabled = useCallback(() => {
     if (!pseudonym) {
       setIsDisabled(true);
@@ -57,12 +64,14 @@ const useStartMenuController = () => {
     printDebug("+++ userPseudonym => " + userPseudonym);
     printDebug("+++ userLanguage => " + language);
 
-    if (userPseudonym && language) {
+    if (userPseudonym && language && level) {
       dispatch(setUserLanguage(language));
+      dispatch(setUserLanguageLevel(level));
 
       let userDataUpdated = { ...userData };
       userDataUpdated.pseudonym = userPseudonym;
       userDataUpdated.language = language;
+      userDataUpdated.level = level;
       userDataUpdated.timestamp = new Date().toLocaleString();
 
       await addUserToFirebaseDB(userDataUpdated)
@@ -96,10 +105,12 @@ const useStartMenuController = () => {
 
   return {
     language,
+    level,
     isDisabled,
     isLoading,
     handleChangeOnPseudonymInput,
     handleChangeOnLanguageInput,
+    handleChangeOnLevelInput,
     handleStartButtonClick,
   };
 };
