@@ -91,7 +91,7 @@ const useCorrectionsView = (
   useEffect(() => {
     const fetchCorrections = async () => {
       try {
-        if (getNumberOfMessagesWithRoleUser(messages) > 4) {
+        if (getNumberOfMessagesWithRoleUser(messages) > 3) {
           setMessagesSufficientForCorrection(true);
           const retrievedCorrections = await getUserCorrections(messages);
           setCorrections(retrievedCorrections);
