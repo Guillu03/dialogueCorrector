@@ -6,6 +6,7 @@
  * Version: 1.1                                                                                             *
  *                                                                                                          *
  ************************************************************************************************************/
+import languageSlice from "./slices/languageSlice";
 import openAISlice from "./slices/openAISlice";
 import userDBSlice from "./slices/userDBSlice";
 import voiceSlice from "./slices/voiceSlice";
@@ -26,6 +27,7 @@ export const store = configureStore({
     voiceState: voiceSlice,
     openAIState: openAISlice,
     userDBState: userDBSlice,
+    languageState: languageSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware(defaultMiddlewareConfig),

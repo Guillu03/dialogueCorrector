@@ -10,7 +10,6 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { UserDTO } from "../../dtos/UserDTO";
 import { OpenAIMessageDTO } from "../../dtos/OpenAIDTO";
 import { DocumentData, DocumentReference } from "firebase/firestore";
-import { LanguageCode } from "../../types/languageCode";
 
 // Interface with the structure of the global state (must be the same as the reducer definition)
 export interface UserDBRootState {
@@ -29,8 +28,8 @@ const initialState: UserDBState = {
   userData: {
     docRef: null,
     pseudonym: "",
-    language: "es",
-    level: 0,
+    languageName: "",
+    levelName: "",
     messages: [],
     timestamp: "",
   },
@@ -55,18 +54,6 @@ export const userDBSlice = createSlice({
     setUserPseudonym: (state: UserDBState, action: PayloadAction<string>) => {
       state.userData.pseudonym = action.payload;
     },
-    setUserLanguage: (
-      state: UserDBState,
-      action: PayloadAction<LanguageCode>
-    ) => {
-      state.userData.language = action.payload;
-    },
-    setUserLanguageLevel: (
-      state: UserDBState,
-      action: PayloadAction<number>
-    ) => {
-      state.userData.level = action.payload;
-    },
     addMessage: (
       state: UserDBState,
       action: PayloadAction<OpenAIMessageDTO>
@@ -85,8 +72,6 @@ export const userDBSlice = createSlice({
 export const {
   setUserDocRef,
   setUserPseudonym,
-  setUserLanguage,
-  setUserLanguageLevel,
   addMessage,
   setTimestamp,
   resetUserData,

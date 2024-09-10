@@ -5,6 +5,7 @@ import useMessages from "../../hooks/useMessages";
 import useLanguage from "../../../../shared/hooks/useLanguage";
 import { AlexaContext } from "../../../../App";
 import { OpenAIMessageDTO } from "../../../../shared/dtos/OpenAIDTO";
+import { LanguageRootState } from "../../../../shared/redux/slices/languageSlice";
 
 const useCorrectionsView = (
   messages: OpenAIMessageDTO[],
@@ -16,18 +17,17 @@ const useCorrectionsView = (
     useState<boolean>(false);
 
   // Global variables
-  const userLanguageCode = useSelector(
-    (state: UserDBRootState) => state.userDBState.userData.language
+  const languageKey = useSelector(
+    (state: LanguageRootState) => state.languageState.languageData.languageKey
   );
-  const userLanguageLevel = useSelector(
-    (state: UserDBRootState) => state.userDBState.userData.level
+  const levelKey = useSelector(
+    (state: LanguageRootState) => state.languageState.languageData.levelKey
   );
 
   // Custom and React Hooks
   const { getResponseToNewSystemMessageWithoutUpdatingTokens, addMessageToDB } =
     useMessages();
-  const { getLanguageObjectByCode, getLanguageLevelObjectByKey } =
-    useLanguage();
+  const { getLanguageObjectByKey, getLanguageLevelObjectByKey } = useLanguage();
 
   // App Context Data
   const { printDebug } = useContext(AlexaContext);
@@ -38,8 +38,8 @@ const useCorrectionsView = (
     const copyOfResetMessages = [..._messages];
     const systemMessageContent = `
       En base a una conversación mantenida con el usuario en el idioma ${
-        getLanguageObjectByCode(userLanguageCode)?.name
-      } y el nivel ${getLanguageLevelObjectByKey(userLanguageLevel)?.name}.
+        getLanguageObjectByKey(languageKey)?.name
+      } y el nivel ${getLanguageLevelObjectByKey(levelKey)?.name}.
       Necesito que realices una corrección de las entradas del usuario del siguiente diálogo ${_messages}. 
       Deberás separar por categorías los errores más importantes cometidos por el usuario durante la conversación. 
       Para cada error detectado, deberás devolver la categoría de error cometido, la frase del usuario completa con el error cometido, 
@@ -104,7 +104,7 @@ const useCorrectionsView = (
     };
 
     fetchCorrections();
-  }, [messages, userLanguageCode]);
+  }, [messages, languageKey]);
 
   const getNumberOfMessagesWithRoleUser = (_messages: OpenAIMessageDTO[]) => {
     // Filtrar mensajes que tienen role "user".

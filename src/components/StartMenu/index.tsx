@@ -98,7 +98,7 @@ const StartMenuView: React.FC = () => {
                     >
                       <option value="-1">Selecciona un idioma</option>
                       {languageList.map((language) => (
-                        <option key={language.code} value={language.code}>
+                        <option key={language.key} value={language.key}>
                           {language.name}
                         </option>
                       ))}

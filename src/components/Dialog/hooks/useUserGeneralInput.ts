@@ -5,8 +5,8 @@ import { AlexaContext } from "../../../App";
 import useSpeechResponse from "./useSpeechResponse";
 import useUserEmotionalAnalysis from "./useUserEmotionalAnalysis";
 import { useSelector } from "react-redux";
-import { UserDBRootState } from "../../../shared/redux/slices/userDBSlice";
 import useLanguage from "../../../shared/hooks/useLanguage";
+import { LanguageRootState } from "../../../shared/redux/slices/languageSlice";
 
 const useUserGeneralInput = () => {
   // Constants
@@ -29,17 +29,17 @@ const useUserGeneralInput = () => {
   };
 
   // Global variables
-  const userLanguageCode = useSelector(
-    (state: UserDBRootState) => state.userDBState.userData.language
+  const languageKey = useSelector(
+    (state: LanguageRootState) => state.languageState.languageData.languageKey
   );
-  const userLanguageLevel = useSelector(
-    (state: UserDBRootState) => state.userDBState.userData.level
+  const levelKey = useSelector(
+    (state: LanguageRootState) => state.languageState.languageData.levelKey
   );
 
   // Custom and React Hooks
   const { speechResponseToUserRequest } = useSpeechResponse();
   const { handleUserEmotionalAnalysis } = useUserEmotionalAnalysis();
-  const { getGreetings, getLanguageObjectByCode, getLanguageLevelObjectByKey } =
+  const { getGreetings, getLanguageObjectByKey, getLanguageLevelObjectByKey } =
     useLanguage();
   const {
     getResponseToNewUserMessage,
@@ -92,12 +92,10 @@ const useUserGeneralInput = () => {
   };
 
   const handleConversationStart = (_messages: OpenAIMessageDTO[]) => {
-    const languageName =
-      getLanguageObjectByCode(userLanguageCode)?.name || "Español";
+    const languageName = getLanguageObjectByKey(languageKey)?.name || "Español";
     const languageLevel =
-      getLanguageLevelObjectByKey(userLanguageLevel)?.name ||
-      "Nivel Principiante";
-    const greetings = getGreetings(userLanguageCode);
+      getLanguageLevelObjectByKey(levelKey)?.name || "Nivel Principiante";
+    const greetings = getGreetings(languageKey);
 
     if (isConversationStarting(_messages)) {
       addSystemMessageAndUpdateTokens(

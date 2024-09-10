@@ -18,8 +18,8 @@ import { VoiceMsgStatus } from "../../shared/enums/VoiceMsgStatus";
 import useUserGeneralInput from "./hooks/useUserGeneralInput";
 import { OpenAIRootState } from "../../shared/redux/slices/openAISlice";
 import useSpeechResponse from "./hooks/useSpeechResponse";
-import { UserDBRootState } from "../../shared/redux/slices/userDBSlice";
 import useLanguage from "../../shared/hooks/useLanguage";
+import { LanguageRootState } from "../../shared/redux/slices/languageSlice";
 
 const useDialogController = () => {
   // Local variables
@@ -44,8 +44,8 @@ const useDialogController = () => {
   const userRequest = useSelector(
     (state: VoiceRootState) => state.voiceState?.data?.userRequest
   );
-  const userLanguageCode = useSelector(
-    (state: UserDBRootState) => state.userDBState.userData.language
+  const languageKey = useSelector(
+    (state: LanguageRootState) => state.languageState.languageData.languageKey
   );
   const contextTokensTotal = useSelector(
     (state: OpenAIRootState) => state.openAIState.contextTokensTotal
@@ -86,10 +86,10 @@ const useDialogController = () => {
 
   const sayStartSpeech = useCallback(() => {
     speechResponseToUserRequest(
-      getGreetingsWithSSML(userLanguageCode),
+      getGreetingsWithSSML(languageKey),
       "time-for-general-requests"
     );
-  }, [voiceAPIStatus]);
+  }, [voiceAPIStatus, languageKey]);
 
   /**
    * Manages the intents received from the Voice API

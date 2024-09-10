@@ -13,18 +13,13 @@ import {
   DocumentReference,
   addDoc,
   collection,
-  deleteDoc,
-  getDocs,
-  query,
   updateDoc,
-  where,
   arrayUnion,
 } from "firebase/firestore";
-import { VoiceRootState } from "../redux/slices/voiceSlice";
 import { AlexaContext, FirebaseContext } from "../../App";
-import { UserDTO } from "../dtos/UserDTO";
 import { UserDBRootState } from "../redux/slices/userDBSlice";
 import { OpenAIMessageDTO } from "../dtos/OpenAIDTO";
+import { UserDTO } from "../dtos/UserDTO";
 
 const useFirebaseDBModel = () => {
   /* Global Variables */

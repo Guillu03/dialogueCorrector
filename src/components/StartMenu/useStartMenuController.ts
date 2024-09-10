@@ -5,18 +5,20 @@ import {
   UserDBRootState,
   resetUserData,
   setUserDocRef,
-  setUserLanguage,
-  setUserLanguageLevel,
 } from "../../shared/redux/slices/userDBSlice";
 import useFirebaseDBModel from "../../shared/hooks/useFirebaseDBModel";
 import { AlexaContext } from "../../App";
 import { useGeneratePseudonym } from "../../shared/utils/useGeneratePseudonym";
 import { resetOpenAIState } from "../../shared/redux/slices/openAISlice";
-import { LanguageCode } from "../../shared/types/languageCode";
+import useLanguage from "../../shared/hooks/useLanguage";
+import {
+  setLanguageKey,
+  setLevelKey,
+} from "../../shared/redux/slices/languageSlice";
 
 const useStartMenuController = () => {
   const [pseudonym, setPseudonym] = useState<string>();
-  const [language, setLanguage] = useState<LanguageCode>();
+  const [language, setLanguage] = useState<number>();
   const [level, setLevel] = useState<number>();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -28,6 +30,7 @@ const useStartMenuController = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { addUserToFirebaseDB } = useFirebaseDBModel();
+  const { getLanguageObjectByKey, getLanguageLevelObjectByKey } = useLanguage();
 
   const { printDebug } = useContext(AlexaContext);
 
@@ -63,15 +66,18 @@ const useStartMenuController = () => {
     printDebug("+++ Pseudonym => " + pseudonym);
     printDebug("+++ userPseudonym => " + userPseudonym);
     printDebug("+++ userLanguage => " + language);
+    printDebug("+++ userLevel => " + level);
 
     if (userPseudonym && language && level) {
-      dispatch(setUserLanguage(language));
-      dispatch(setUserLanguageLevel(level));
+      dispatch(setLanguageKey(language));
+      dispatch(setLevelKey(level));
 
       let userDataUpdated = { ...userData };
       userDataUpdated.pseudonym = userPseudonym;
-      userDataUpdated.language = language;
-      userDataUpdated.level = level;
+      userDataUpdated.languageName =
+        getLanguageObjectByKey(language)?.name || "";
+      userDataUpdated.levelName =
+        getLanguageLevelObjectByKey(level)?.name || "";
       userDataUpdated.timestamp = new Date().toLocaleString();
 
       await addUserToFirebaseDB(userDataUpdated)
