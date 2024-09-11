@@ -47,7 +47,7 @@ const useCorrectionsView = (
       Para cada error detectado, deberás devolver la categoría de error cometido, la frase del usuario completa con el error cometido, 
       una explicación del error cometido y un ejemplo de cómo sería la frase corregida. 
 
-      Responde únicamente con el siguiente JSON con la información solicitada y sin ningún texto adicional:
+      Deberás responder siempre con el siguiente JSON con la información solicitada y sin ningún otro texto adicional:
       {
         "corrections": [
           {
@@ -63,11 +63,20 @@ const useCorrectionsView = (
       En el caso en el que no hayas detectado ningún error en los mensajes deberás devolver el array "corrections" vacío.
     `;
 
+    printDebug("BEFORE CORRECTIONS RESPONSE");
+
     const artificialIntelligenceResponse =
       await getResponseToNewSystemMessageWithoutUpdatingTokens(
         systemMessageContent,
         copyOfResetMessages
       );
+
+    printDebug(
+      "AFTER CORRECTIONS RESPONSE => " +
+        JSON.stringify(artificialIntelligenceResponse)
+    );
+
+    await addMessageToDB("assistant", artificialIntelligenceResponse);
 
     const responseObject = JSON.parse(artificialIntelligenceResponse);
 
@@ -77,11 +86,6 @@ const useCorrectionsView = (
       )} `
     );
 
-    await addMessageToDB(
-      "assistant",
-      JSON.stringify(responseObject.corrections)
-    );
-
     return responseObject.corrections;
   };
 
@@ -89,6 +93,7 @@ const useCorrectionsView = (
     const fetchCorrections = async () => {
       try {
         const userMessages = getNumberOfMessagesWithRoleUser(messages);
+        printDebug("userMessages => " + userMessages);
         if (userMessages.length > 3) {
           setMessagesSufficientForCorrection(true);
           const retrievedCorrections = await getUserCorrections(userMessages);
