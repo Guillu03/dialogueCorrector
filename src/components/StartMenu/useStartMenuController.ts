@@ -18,6 +18,7 @@ import {
 
 const useStartMenuController = () => {
   const [pseudonym, setPseudonym] = useState<string>();
+  const [age, setAge] = useState<number>();
   const [language, setLanguage] = useState<number>();
   const [level, setLevel] = useState<number>();
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
@@ -37,6 +38,10 @@ const useStartMenuController = () => {
   const handleChangeOnPseudonymInput = (event: any) => {
     console.log("+++ PSEUDONYM Value +++ => " + event.target.value);
     setPseudonym(event.target.value);
+  };
+
+  const handleChangeOnAgeInput = (event: any) => {
+    setAge(event.target.value);
   };
 
   const handleChangeOnLanguageInput = (event: any) => {
@@ -110,11 +115,13 @@ const useStartMenuController = () => {
   }, [handleIsStartButtonDisabled]);
 
   return {
+    age,
     language,
     level,
     isDisabled,
     isLoading,
     handleChangeOnPseudonymInput,
+    handleChangeOnAgeInput,
     handleChangeOnLanguageInput,
     handleChangeOnLevelInput,
     handleStartButtonClick,

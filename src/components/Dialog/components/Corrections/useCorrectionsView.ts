@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { UserDBRootState } from "../../../../shared/redux/slices/userDBSlice";
 import useMessages from "../../hooks/useMessages";
 import useLanguage from "../../../../shared/hooks/useLanguage";
 import { AlexaContext } from "../../../../App";

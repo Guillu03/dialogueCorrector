@@ -28,6 +28,7 @@ const initialState: UserDBState = {
   userData: {
     docRef: null,
     pseudonym: "",
+    age: 0,
     languageName: "",
     levelName: "",
     messages: [],
@@ -54,6 +55,9 @@ export const userDBSlice = createSlice({
     setUserPseudonym: (state: UserDBState, action: PayloadAction<string>) => {
       state.userData.pseudonym = action.payload;
     },
+    setUserAge: (state: UserDBState, action: PayloadAction<number>) => {
+      state.userData.age = action.payload;
+    },
     addMessage: (
       state: UserDBState,
       action: PayloadAction<OpenAIMessageDTO>
@@ -72,6 +76,7 @@ export const userDBSlice = createSlice({
 export const {
   setUserDocRef,
   setUserPseudonym,
+  setUserAge,
   addMessage,
   setTimestamp,
   resetUserData,

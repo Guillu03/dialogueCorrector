@@ -27,11 +27,13 @@ const StartMenuView: React.FC = () => {
   const languageLevels = LEVELS;
 
   const {
+    age,
     language,
     level,
     isDisabled,
     isLoading,
     handleChangeOnPseudonymInput,
+    handleChangeOnAgeInput,
     handleChangeOnLanguageInput,
     handleChangeOnLevelInput,
     handleStartButtonClick,
@@ -75,6 +77,34 @@ const StartMenuView: React.FC = () => {
                         />
                       </Form.Group>
                     </Form>
+                  </Col>
+                </Row>{" "}
+                <br />
+                <Row>
+                  <Col
+                    xs={2}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <div style={{ color: "red" }}>*</div>
+                    Edad
+                  </Col>
+                  <Col>
+                    <Form.Select
+                      aria-label="Default select example"
+                      value={age}
+                      onChange={handleChangeOnAgeInput}
+                    >
+                      <option value="">Seleccione la edad del usuario</option>
+                      {Array.from({ length: 100 }, (_, i) => (
+                        <option key={i} value={i}>
+                          {i}
+                        </option>
+                      ))}
+                    </Form.Select>
                   </Col>
                 </Row>
                 <br />
