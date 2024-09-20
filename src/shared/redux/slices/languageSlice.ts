@@ -8,6 +8,8 @@
  ************************************************************************************************************/
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { LanguageDTO } from "../../dtos/LanguageDTO";
+import { LevelType } from "../../constants/levels";
+import { TopicType } from "../../constants/topics";
 
 // Interface with the structure of the global state (must be the same as the reducer definition)
 export interface LanguageRootState {
@@ -24,9 +26,17 @@ interface LanguageState {
 // Initialization of state's variables
 const initialState: LanguageState = {
   languageData: {
-    languageKey: 0,
-    level: "-1",
-    topicKey: 0,
+    languageKey: -1,
+    levelObject: {
+      key: "",
+      name: "",
+      description: "",
+    } as LevelType,
+    topicObject: {
+      key: -2,
+      name: "",
+      description: "",
+    } as TopicType,
   },
 };
 
@@ -40,11 +50,11 @@ export const languageSlice = createSlice({
     setLanguageKey: (state: LanguageState, action: PayloadAction<number>) => {
       state.languageData.languageKey = action.payload;
     },
-    setLevel: (state: LanguageState, action: PayloadAction<string>) => {
-      state.languageData.level = action.payload;
+    setLevel: (state: LanguageState, action: PayloadAction<LevelType>) => {
+      state.languageData.levelObject = action.payload;
     },
-    setTopicKey: (state: LanguageState, action: PayloadAction<number>) => {
-      state.languageData.topicKey = action.payload;
+    setTopicKey: (state: LanguageState, action: PayloadAction<TopicType>) => {
+      state.languageData.topicObject = action.payload;
     },
   },
 });

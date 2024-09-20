@@ -29,6 +29,7 @@ const StartMenuView: React.FC = () => {
     selectedLanguage,
     selectedLevel,
     selectedTopic,
+    selectedOtherTopic,
     isDisabled,
     isLoading,
     handleChangeOnPseudonymInput,
@@ -36,12 +37,13 @@ const StartMenuView: React.FC = () => {
     handleChangeOnLanguageInput,
     handleChangeOnLevelInput,
     handleChangeOnTopicInput,
+    handleChangeOnOtherTopicInput,
     handleStartButtonClick,
   } = useStartMenuController();
 
   const languageList = LANGUAGES;
   const languageLevels = Object.entries(LEVELS);
-  const topicsByLevel = selectedLevel !== "-1" ? TOPICS[selectedLevel] : [];
+  const topicsByLevel = selectedLevel.key ? TOPICS[selectedLevel.key] : [];
 
   return (
     <>
@@ -170,7 +172,7 @@ const StartMenuView: React.FC = () => {
                     <Form.Select
                       className="select"
                       aria-label="Default select example"
-                      value={selectedLevel}
+                      value={selectedLevel.key}
                       onChange={handleChangeOnLevelInput}
                     >
                       <option className="option" value="-1">
@@ -181,7 +183,7 @@ const StartMenuView: React.FC = () => {
                           <option
                             className="option"
                             key={levelData.key}
-                            value={key}
+                            value={levelData.key}
                           >
                             {key} - {levelData.name}
                           </option>
@@ -208,11 +210,17 @@ const StartMenuView: React.FC = () => {
                     <Form.Select
                       className="select"
                       aria-label="Default select example"
-                      value={selectedTopic}
+                      value={selectedTopic.key}
                       onChange={handleChangeOnTopicInput}
                     >
-                      <option className="option" value="-1">
+                      <option className="option" value="-2">
                         Selecciona un tema después de elegir un nivel
+                      </option>
+                      <option className="option" value="-1">
+                        Otros
+                      </option>
+                      <option className="option" value="0">
+                        Aleatorio
                       </option>
                       {topicsByLevel.map((topicData: TopicType) => (
                         <option
@@ -224,6 +232,18 @@ const StartMenuView: React.FC = () => {
                         </option>
                       ))}
                     </Form.Select>
+                    <br />
+                    {/* Mostrar campo de texto solo si se selecciona "Otros" */}
+                    {selectedTopic.key == -1 && (
+                      <Form.Group controlId="otherTopicInput">
+                        <Form.Control
+                          type="text"
+                          placeholder="Introduce el tema deseado"
+                          value={selectedOtherTopic}
+                          onChange={handleChangeOnOtherTopicInput}
+                        />
+                      </Form.Group>
+                    )}
                   </Col>
                 </Row>
               </Container>

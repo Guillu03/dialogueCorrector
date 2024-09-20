@@ -1,5 +1,8 @@
+import { LevelType } from "../constants/levels";
+import { TopicType } from "../constants/topics";
+
 export interface LanguageDTO {
   languageKey: number;
-  level: string;
-  topicKey: number;
+  levelObject: LevelType;
+  topicObject: TopicType;
 }

@@ -24,7 +24,7 @@
   display: grid;
   /* The rows takes up one fraction of the grid */
   grid-template-columns: 1fr;
-  grid-template-rows: auto 0.4fr;
+  grid-template-rows: auto auto;
   width: 100%;
 }
 

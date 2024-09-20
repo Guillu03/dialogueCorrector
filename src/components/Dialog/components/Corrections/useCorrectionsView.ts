@@ -21,14 +21,14 @@ const useCorrectionsView = (
   const languageKey = useSelector(
     (state: LanguageRootState) => state.languageState.languageData.languageKey
   );
-  const level = useSelector(
-    (state: LanguageRootState) => state.languageState.languageData.level
+  const levelObject = useSelector(
+    (state: LanguageRootState) => state.languageState.languageData.levelObject
   );
 
   // Custom and React Hooks
   const { getResponseToNewSystemMessageWithoutUpdatingTokens, addMessageToDB } =
     useMessages();
-  const { getLanguageObjectByKey, getLanguageLevelObjectByKey } = useLanguage();
+  const { getLanguageObjectByKey } = useLanguage();
 
   // App Context Data
   const { printDebug } = useContext(AlexaContext);
@@ -41,7 +41,7 @@ const useCorrectionsView = (
     const systemMessageContent = `
       En base a una conversación mantenida con el usuario en el idioma ${
         getLanguageObjectByKey(languageKey)?.name
-      } y el nivel ${level} - ${getLanguageLevelObjectByKey(level).name}.
+      } y el nivel ${levelObject.key} - ${levelObject.name}.
       Necesito que realices una corrección de las entradas del usuario del siguiente diálogo ${_messages}. 
       Necesito que corrijas todas las entradas del usuario, teniendo en cuenta que el idioma hablado ha sido el  ${
         getLanguageObjectByKey(languageKey)?.name
