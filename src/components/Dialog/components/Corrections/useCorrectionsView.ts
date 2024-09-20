@@ -1,10 +1,12 @@
 import { useContext, useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useMessages from "../../hooks/useMessages";
 import useLanguage from "../../../../shared/hooks/useLanguage";
 import { AlexaContext } from "../../../../App";
 import { OpenAIMessageDTO } from "../../../../shared/dtos/OpenAIDTO";
 import { LanguageRootState } from "../../../../shared/redux/slices/languageSlice";
+import { resetOpenAIState } from "../../../../shared/redux/slices/openAISlice";
+import { resetUserData } from "../../../../shared/redux/slices/userDBSlice";
 
 const useCorrectionsView = (
   messages: OpenAIMessageDTO[],
@@ -19,8 +21,8 @@ const useCorrectionsView = (
   const languageKey = useSelector(
     (state: LanguageRootState) => state.languageState.languageData.languageKey
   );
-  const levelKey = useSelector(
-    (state: LanguageRootState) => state.languageState.languageData.levelKey
+  const level = useSelector(
+    (state: LanguageRootState) => state.languageState.languageData.level
   );
 
   // Custom and React Hooks
@@ -30,6 +32,7 @@ const useCorrectionsView = (
 
   // App Context Data
   const { printDebug } = useContext(AlexaContext);
+  const dispatch = useDispatch();
 
   const getUserCorrections = async (
     _messages: OpenAIMessageDTO[]
@@ -38,7 +41,7 @@ const useCorrectionsView = (
     const systemMessageContent = `
       En base a una conversación mantenida con el usuario en el idioma ${
         getLanguageObjectByKey(languageKey)?.name
-      } y el nivel ${getLanguageLevelObjectByKey(levelKey)?.name}.
+      } y el nivel ${level} - ${getLanguageLevelObjectByKey(level).name}.
       Necesito que realices una corrección de las entradas del usuario del siguiente diálogo ${_messages}. 
       Necesito que corrijas todas las entradas del usuario, teniendo en cuenta que el idioma hablado ha sido el  ${
         getLanguageObjectByKey(languageKey)?.name
@@ -119,6 +122,8 @@ const useCorrectionsView = (
     // Función de limpieza para ejecutar al desmontar el componente
     return () => {
       printDebug("CORRECTIONS DISABLED");
+      dispatch(resetOpenAIState());
+      dispatch(resetUserData());
       setSeeCorrectionsEnabled(false);
     };
   }, [setSeeCorrectionsEnabled]);

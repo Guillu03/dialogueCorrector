@@ -25,7 +25,8 @@ interface LanguageState {
 const initialState: LanguageState = {
   languageData: {
     languageKey: 0,
-    levelKey: 0,
+    level: "-1",
+    topicKey: 0,
   },
 };
 
@@ -39,11 +40,14 @@ export const languageSlice = createSlice({
     setLanguageKey: (state: LanguageState, action: PayloadAction<number>) => {
       state.languageData.languageKey = action.payload;
     },
-    setLevelKey: (state: LanguageState, action: PayloadAction<number>) => {
-      state.languageData.levelKey = action.payload;
+    setLevel: (state: LanguageState, action: PayloadAction<string>) => {
+      state.languageData.level = action.payload;
+    },
+    setTopicKey: (state: LanguageState, action: PayloadAction<number>) => {
+      state.languageData.topicKey = action.payload;
     },
   },
 });
 
-export const { setLanguageKey, setLevelKey } = languageSlice.actions;
+export const { setLanguageKey, setLevel, setTopicKey } = languageSlice.actions;
 export default languageSlice.reducer;

@@ -8,26 +8,27 @@ import { useSelector } from "react-redux";
 import useLanguage from "../../../shared/hooks/useLanguage";
 import { LanguageRootState } from "../../../shared/redux/slices/languageSlice";
 import { UserDBRootState } from "../../../shared/redux/slices/userDBSlice";
+import { LevelType } from "../../../shared/constants/levels";
+import { TopicType } from "../../../shared/constants/topics";
 
 const useUserGeneralInput = () => {
   // Constants
   const INITIAL_PROMPT = (
     _userAge: number,
-    _language: string,
-    _level: string
+    _languageName: string,
+    _level: string,
+    _levelObject: LevelType,
+    _topicObject: TopicType
   ): string => {
     return `
-      Contexto: Actúa como un profesor de idiomas enfocado en mejorar las habilidades comunicativas del usuario en ${_language}. 
-      Tu objetivo es mantener una conversación continua con el usuario, seleccionando una variedad de temas adecuados para fomentar la práctica constante y el progreso en el idioma. 
-      Adapta el nivel de complejidad del diálogo al nivel de competencia del usuario (${_level}), asegurándote de que la comunicación sea clara, comprensible y ajustada a sus necesidades.
+      Contexto:
 
-      Instrucciones específicas:
-      Considera la edad del usuario que en este caso es ${_userAge}, si es menor de 12 años, ajusta el diálogo para que sea apropiado y accesible para niños, utilizando un lenguaje sencillo y temas adecuados para su edad.
-      Si el usuario tiene 12 años o más, adapta el contenido y la complejidad del diálogo de acuerdo con el nivel seleccionado (${_level}), proporcionando desafíos lingüísticos adecuados para fomentar una práctica efectiva y progresiva.
-      En cualquier caso deberás tener una actitud proactiva seleccionando e iniciando tú los temas de los que hablar según el nivel y edad del usuario.
+      Actúa como un profesor de idiomas enfocado en mejorar las habilidades comunicativas del usuario. Tu objetivo es mantener una conversación proactiva y continua con el usuario que le permita practicar en el progreso de un idioma. El idioma seleccionado es: ${_languageName}.
 
-      Objetivo final: Proporcionar una experiencia de aprendizaje personalizada que motive al usuario a mejorar sus habilidades de comunicación en ${_language}, respetando su nivel de competencia y edad.
-    `;
+      Deberás mantener una conversación con el usuario del nivel: ${_level} - ${_levelObject.name}. En dicho nivel, el objetivo es el siguiente: ${_levelObject.description}. Deberás adaptar el nivel de complejidad del diálogo al nivel de competencia del usuario indicado anteriormente.
+
+      Además, el tema de conversación será: ${_topicObject.name}. El objetivo de este tema es: ${_topicObject.description}. Deberás tener en cuenta la edad del usuario, que en este caso es: ${_userAge}.
+`;
   };
 
   // Global variables
@@ -37,15 +38,22 @@ const useUserGeneralInput = () => {
   const languageKey = useSelector(
     (state: LanguageRootState) => state.languageState.languageData.languageKey
   );
-  const levelKey = useSelector(
-    (state: LanguageRootState) => state.languageState.languageData.levelKey
+  const level = useSelector(
+    (state: LanguageRootState) => state.languageState.languageData.level
+  );
+  const topicKey = useSelector(
+    (state: LanguageRootState) => state.languageState.languageData.topicKey
   );
 
   // Custom and React Hooks
   const { speechResponseToUserRequest } = useSpeechResponse();
   const { handleUserEmotionalAnalysis } = useUserEmotionalAnalysis();
-  const { getGreetings, getLanguageObjectByKey, getLanguageLevelObjectByKey } =
-    useLanguage();
+  const {
+    getGreetings,
+    getLanguageObjectByKey,
+    getLanguageLevelObjectByKey,
+    getLanguageTopicObjectByKey,
+  } = useLanguage();
   const {
     getResponseToNewUserMessage,
     addSystemMessageAndUpdateTokens,
@@ -97,16 +105,24 @@ const useUserGeneralInput = () => {
   };
 
   const handleConversationStart = (_messages: OpenAIMessageDTO[]) => {
-    const languageName = getLanguageObjectByKey(languageKey)?.name || "Español";
-    const languageLevel =
-      getLanguageLevelObjectByKey(levelKey)?.name || "Nivel Principiante";
+    const languageName = getLanguageObjectByKey(languageKey)?.name;
+    const levelObject = getLanguageLevelObjectByKey(level);
+    const topicObject = getLanguageTopicObjectByKey(level, topicKey);
     const greetings = getGreetings(languageKey);
 
     if (isConversationStarting(_messages)) {
-      addSystemMessageAndUpdateTokens(
-        INITIAL_PROMPT(userAge, languageName, languageLevel),
-        _messages
-      );
+      if (languageName && levelObject && topicObject) {
+        addSystemMessageAndUpdateTokens(
+          INITIAL_PROMPT(
+            userAge,
+            languageName,
+            level,
+            levelObject,
+            topicObject
+          ),
+          _messages
+        );
+      }
     }
 
     addAssistantMessageAndUpdateTokens(greetings, _messages);

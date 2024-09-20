@@ -31,6 +31,7 @@ const initialState: UserDBState = {
     age: 0,
     languageName: "",
     levelName: "",
+    topicName: "",
     messages: [],
     timestamp: "",
   },
@@ -67,6 +68,9 @@ export const userDBSlice = createSlice({
     setTimestamp: (state: UserDBState, action: PayloadAction<string>) => {
       state.userData.timestamp = action.payload;
     },
+    setUserData: (state: UserDBState, action: PayloadAction<UserDTO>) => {
+      state.userData = action.payload;
+    },
     resetUserData: (state: UserDBState) => {
       state.userData = initialState.userData;
     },
@@ -79,6 +83,7 @@ export const {
   setUserAge,
   addMessage,
   setTimestamp,
+  setUserData,
   resetUserData,
 } = userDBSlice.actions;
 export default userDBSlice.reducer;

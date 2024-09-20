@@ -16,14 +16,14 @@
   margin-top: 80px;
 }
 
-.corrections-list {
+.item-list {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.correction-message {
-  padding: 10px;
+.item-message {
+  padding: 5px;
   border: 1px solid #ccc;
   border-radius: 5px;
   background-color: #f9f9f9;
@@ -40,4 +40,37 @@
   align-items: center;
   justify-content: center;
   height: 30%;
+}
+
+.divider {
+  border: "1px solid #ccc";
+  margin: "20px 0";
+}
+
+.header {
+  font-weight: bold;
+  font-size: 1.8rem;
+}
+
+.subheader {
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+.paragraph {
+  font-size: 1.2rem;
+}
+
+@media (min-width: 1024px) {
+  .header {
+    font-size: 2.3rem;
+  }
+
+  .subheader {
+    font-size: 2rem;
+  }
+
+  .paragraph {
+    font-size: 1.7rem;
+  }
 }

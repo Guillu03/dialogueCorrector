@@ -3,6 +3,7 @@ import { greetings } from "../constants/greetings";
 import { LANGUAGES } from "../constants/languages";
 import { AlexaContext } from "../../App";
 import { LEVELS } from "../constants/levels";
+import { TOPICS } from "../constants/topics";
 
 const useLanguage = () => {
   // App Context Data
@@ -22,8 +23,12 @@ const useLanguage = () => {
     return LANGUAGES.find((language) => language.key == _languageKey);
   };
 
-  const getLanguageLevelObjectByKey = (_levelKey: number) => {
-    return LEVELS.find((level) => level.key == _levelKey);
+  const getLanguageLevelObjectByKey = (_level: string) => {
+    return LEVELS[_level];
+  };
+
+  const getLanguageTopicObjectByKey = (_level: string, _topicKey: number) => {
+    return TOPICS[_level].find((topic) => topic.key == _topicKey);
   };
 
   return {
@@ -31,6 +36,7 @@ const useLanguage = () => {
     getGreetingsWithSSML,
     getLanguageObjectByKey,
     getLanguageLevelObjectByKey,
+    getLanguageTopicObjectByKey,
   };
 };
 export default useLanguage;

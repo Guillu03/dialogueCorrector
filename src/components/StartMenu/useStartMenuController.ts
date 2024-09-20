@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import {
   UserDBRootState,
   resetUserData,
+  setUserData,
   setUserDocRef,
 } from "../../shared/redux/slices/userDBSlice";
 import useFirebaseDBModel from "../../shared/hooks/useFirebaseDBModel";
@@ -13,14 +14,16 @@ import { resetOpenAIState } from "../../shared/redux/slices/openAISlice";
 import useLanguage from "../../shared/hooks/useLanguage";
 import {
   setLanguageKey,
-  setLevelKey,
+  setLevel,
+  setTopicKey,
 } from "../../shared/redux/slices/languageSlice";
 
 const useStartMenuController = () => {
   const [pseudonym, setPseudonym] = useState<string>();
-  const [age, setAge] = useState<number>();
-  const [language, setLanguage] = useState<number>();
-  const [level, setLevel] = useState<number>();
+  const [age, setAge] = useState<number>(-1);
+  const [selectedLanguage, setSelectedLanguage] = useState<number>(-1);
+  const [selectedLevel, setSelectedLevel] = useState<string>("-1");
+  const [selectedTopic, setSelectedTopic] = useState<number>(-1);
   const [isDisabled, setIsDisabled] = useState<boolean>(true);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -31,7 +34,11 @@ const useStartMenuController = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { addUserToFirebaseDB } = useFirebaseDBModel();
-  const { getLanguageObjectByKey, getLanguageLevelObjectByKey } = useLanguage();
+  const {
+    getLanguageObjectByKey,
+    getLanguageLevelObjectByKey,
+    getLanguageTopicObjectByKey,
+  } = useLanguage();
 
   const { printDebug } = useContext(AlexaContext);
 
@@ -41,26 +48,44 @@ const useStartMenuController = () => {
   };
 
   const handleChangeOnAgeInput = (event: any) => {
+    console.log("+++ AGE Value +++ => " + event.target.value);
     setAge(event.target.value);
   };
 
   const handleChangeOnLanguageInput = (event: any) => {
     console.log("+++ Language Value +++ => " + event.target.value);
-    setLanguage(event.target.value);
+    setSelectedLanguage(event.target.value);
   };
 
   const handleChangeOnLevelInput = (event: any) => {
     console.log("+++ Level Value +++ => " + event.target.value);
-    setLevel(event.target.value);
+    setSelectedLevel(event.target.value);
+    setSelectedTopic(-1);
+  };
+
+  const handleChangeOnTopicInput = (event: any) => {
+    console.log("+++ Topic Value +++ => " + event.target.value);
+    setSelectedTopic(event.target.value);
   };
 
   const handleIsStartButtonDisabled = useCallback(() => {
-    if (!pseudonym) {
-      setIsDisabled(true);
-    } else {
+    printDebug("+++ Pseudonym => " + pseudonym);
+    printDebug("+++ Age => " + age);
+    printDebug("+++ userLanguage => " + selectedLanguage);
+    printDebug("+++ userLevel => " + selectedLevel);
+    printDebug("+++ userTopic => " + selectedTopic);
+    if (
+      pseudonym &&
+      age > 0 &&
+      selectedLanguage >= 0 &&
+      selectedLevel !== "-1" &&
+      selectedTopic >= 0
+    ) {
       setIsDisabled(false);
+    } else {
+      setIsDisabled(true);
     }
-  }, [pseudonym]);
+  }, [pseudonym, age, selectedLanguage, selectedLevel, selectedTopic]);
 
   const handleStartButtonClick = async () => {
     setIsLoading(true);
@@ -69,21 +94,35 @@ const useStartMenuController = () => {
     const userPseudonym: string = getUserPseudonym();
 
     printDebug("+++ Pseudonym => " + pseudonym);
+    printDebug("+++ Age => " + age);
     printDebug("+++ userPseudonym => " + userPseudonym);
-    printDebug("+++ userLanguage => " + language);
-    printDebug("+++ userLevel => " + level);
+    printDebug("+++ userLanguage => " + selectedLanguage);
+    printDebug("+++ userLevel => " + selectedLevel);
+    printDebug("+++ userTopic => " + selectedTopic);
 
-    if (userPseudonym && language && level) {
-      dispatch(setLanguageKey(language));
-      dispatch(setLevelKey(level));
+    if (
+      userPseudonym &&
+      age &&
+      selectedLanguage &&
+      selectedLevel &&
+      selectedTopic
+    ) {
+      dispatch(setLanguageKey(selectedLanguage));
+      dispatch(setLevel(selectedLevel));
+      dispatch(setTopicKey(selectedTopic));
 
       let userDataUpdated = { ...userData };
       userDataUpdated.pseudonym = userPseudonym;
+      userDataUpdated.age = age;
       userDataUpdated.languageName =
-        getLanguageObjectByKey(language)?.name || "";
+        getLanguageObjectByKey(selectedLanguage)?.name || "";
       userDataUpdated.levelName =
-        getLanguageLevelObjectByKey(level)?.name || "";
+        getLanguageLevelObjectByKey(selectedLevel)?.name || "";
+      userDataUpdated.topicName =
+        getLanguageTopicObjectByKey(selectedLevel, selectedTopic)?.name || "";
       userDataUpdated.timestamp = new Date().toLocaleString();
+
+      dispatch(setUserData(userDataUpdated));
 
       await addUserToFirebaseDB(userDataUpdated)
         .then((docRefId) => {
@@ -116,14 +155,16 @@ const useStartMenuController = () => {
 
   return {
     age,
-    language,
-    level,
+    selectedLanguage,
+    selectedLevel,
+    selectedTopic,
     isDisabled,
     isLoading,
     handleChangeOnPseudonymInput,
     handleChangeOnAgeInput,
     handleChangeOnLanguageInput,
     handleChangeOnLevelInput,
+    handleChangeOnTopicInput,
     handleStartButtonClick,
   };
 };

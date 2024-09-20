@@ -41,21 +41,39 @@ const CorrectionsView: React.FC<CorrectionsViewProps> = ({
         <div className="corrections-list-container">
           {messagesSufficientForCorrection ? (
             corrections && corrections.length > 0 ? (
-              <div className="corrections-list">
-                {corrections.map((correction: any, index: number) => (
-                  <div key={index} className="correction-message">
-                    <h3>{correction.category}</h3>
-                    <p>
-                      <strong>Error:</strong> {correction.error}
-                    </p>
-                    <p>
-                      <strong>Explicación:</strong> {correction.explanation}
-                    </p>
-                    <p>
-                      <strong>Corrección:</strong> {correction.correction}
-                    </p>
-                  </div>
-                ))}
+              <div>
+                <div className="item-list">
+                  <h2 className="header">Correcciones</h2>
+                  {corrections.map((correction: any, index: number) => (
+                    <div key={index} className="item-message">
+                      <h3 className="subheader">{correction.category}</h3>
+                      <p className="paragraph">
+                        <strong>Error: </strong> {correction.error}
+                      </p>
+                      <p className="paragraph">
+                        <strong>Explicación: </strong> {correction.explanation}
+                      </p>
+                      <p className="paragraph">
+                        <strong>Corrección: </strong> {correction.correction}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                <hr className="divider" />
+                <div className="item-list">
+                  <h2 className="header">Diálogo</h2>
+                  {messages.map((message, index) => (
+                    <div key={index} className="item-message">
+                      <p className="paragraph">
+                        <strong>Rol: </strong>
+                        {message.role}
+                      </p>
+                      <p className="paragraph">
+                        <strong>Contenido: </strong> {message.content}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
             ) : (
               <div className="grid-item item-icon-load-alexa-loading-view">
@@ -68,8 +86,8 @@ const CorrectionsView: React.FC<CorrectionsViewProps> = ({
             )
           ) : (
             <div className="correction-insufficient-messages">
-              <h3>
-                <strong>
+              <h3 className="subheader">
+                <strong className="paragraph">
                   No hay mensajes suficientes para poder realizar la corrección
                 </strong>
               </h3>

@@ -15,7 +15,8 @@ import "./start-menu.css";
 import useStartMenuController from "./useStartMenuController";
 import Button from "react-bootstrap/Button";
 import { LANGUAGES } from "../../shared/constants/languages";
-import { LEVELS } from "../../shared/constants/levels";
+import { LEVELS, LevelType } from "../../shared/constants/levels";
+import { TOPICS, TopicType } from "../../shared/constants/topics";
 
 /**
  * View with application's progress
@@ -23,21 +24,24 @@ import { LEVELS } from "../../shared/constants/levels";
  * @returns OptionsView
  */
 const StartMenuView: React.FC = () => {
-  const languageList = LANGUAGES;
-  const languageLevels = LEVELS;
-
   const {
     age,
-    language,
-    level,
+    selectedLanguage,
+    selectedLevel,
+    selectedTopic,
     isDisabled,
     isLoading,
     handleChangeOnPseudonymInput,
     handleChangeOnAgeInput,
     handleChangeOnLanguageInput,
     handleChangeOnLevelInput,
+    handleChangeOnTopicInput,
     handleStartButtonClick,
   } = useStartMenuController();
+
+  const languageList = LANGUAGES;
+  const languageLevels = Object.entries(LEVELS);
+  const topicsByLevel = selectedLevel !== "-1" ? TOPICS[selectedLevel] : [];
 
   return (
     <>
@@ -52,12 +56,13 @@ const StartMenuView: React.FC = () => {
               }}
             >
               <Container>
-                <h3 style={{ marginBottom: "30px", fontWeight: "bold" }}>
+                <h5 className="header">
                   Rellena el siguiente formulario para poder comenzar el diálogo
-                </h3>
+                </h5>
                 <Row>
                   <Col
                     xs={2}
+                    className="label"
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -83,6 +88,7 @@ const StartMenuView: React.FC = () => {
                 <Row>
                   <Col
                     xs={2}
+                    className="label"
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -94,13 +100,16 @@ const StartMenuView: React.FC = () => {
                   </Col>
                   <Col>
                     <Form.Select
+                      className="select"
                       aria-label="Default select example"
                       value={age}
                       onChange={handleChangeOnAgeInput}
                     >
-                      <option value="">Seleccione la edad del usuario</option>
+                      <option className="option" value="-1">
+                        Seleccione la edad del usuario
+                      </option>
                       {Array.from({ length: 100 }, (_, i) => (
-                        <option key={i} value={i}>
+                        <option className="option" key={i} value={i}>
                           {i}
                         </option>
                       ))}
@@ -111,6 +120,7 @@ const StartMenuView: React.FC = () => {
                 <Row>
                   <Col
                     xs={2}
+                    className="label"
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -122,13 +132,20 @@ const StartMenuView: React.FC = () => {
                   </Col>
                   <Col>
                     <Form.Select
+                      className="select"
                       aria-label="Default select example"
-                      value={language}
+                      value={selectedLanguage}
                       onChange={handleChangeOnLanguageInput}
                     >
-                      <option value="-1">Selecciona un idioma</option>
+                      <option className="option" value="-1">
+                        Selecciona un idioma
+                      </option>
                       {languageList.map((language) => (
-                        <option key={language.key} value={language.key}>
+                        <option
+                          className="option"
+                          key={language.key}
+                          value={language.key}
+                        >
                           {language.name}
                         </option>
                       ))}
@@ -139,6 +156,7 @@ const StartMenuView: React.FC = () => {
                 <Row>
                   <Col
                     xs={2}
+                    className="label"
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -150,14 +168,59 @@ const StartMenuView: React.FC = () => {
                   </Col>
                   <Col>
                     <Form.Select
+                      className="select"
                       aria-label="Default select example"
-                      value={level}
+                      value={selectedLevel}
                       onChange={handleChangeOnLevelInput}
                     >
-                      <option value="-1">Selecciona un nivel</option>
-                      {languageLevels.map((level) => (
-                        <option key={level.key} value={level.key}>
-                          {level.name}
+                      <option className="option" value="-1">
+                        Selecciona un nivel
+                      </option>
+                      {languageLevels.map(
+                        ([key, levelData]: [string, LevelType]) => (
+                          <option
+                            className="option"
+                            key={levelData.key}
+                            value={key}
+                          >
+                            {key} - {levelData.name}
+                          </option>
+                        )
+                      )}
+                    </Form.Select>
+                  </Col>
+                </Row>
+                <br />
+                <Row>
+                  <Col
+                    xs={2}
+                    className="label"
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    <div style={{ color: "red" }}>*</div>
+                    Tema
+                  </Col>
+                  <Col>
+                    <Form.Select
+                      className="select"
+                      aria-label="Default select example"
+                      value={selectedTopic}
+                      onChange={handleChangeOnTopicInput}
+                    >
+                      <option className="option" value="-1">
+                        Selecciona un tema después de elegir un nivel
+                      </option>
+                      {topicsByLevel.map((topicData: TopicType) => (
+                        <option
+                          className="option"
+                          key={topicData.key}
+                          value={topicData.key}
+                        >
+                          {topicData.name}
                         </option>
                       ))}
                     </Form.Select>
@@ -183,7 +246,7 @@ const StartMenuView: React.FC = () => {
                     <Container>
                       <Row>
                         {isLoading && (
-                          <Col xs="1">
+                          <Col xs="2">
                             <Spinner
                               as="span"
                               animation="border"

@@ -1,4 +1,5 @@
 export interface LanguageDTO {
   languageKey: number;
-  levelKey: number;
+  level: string;
+  topicKey: number;
 }

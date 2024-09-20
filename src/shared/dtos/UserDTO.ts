@@ -7,6 +7,7 @@ export interface UserDTO {
   age: number;
   languageName: string;
   levelName: string;
+  topicName: string;
   messages: OpenAIMessageDTO[];
   timestamp: string;
 }
