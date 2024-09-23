@@ -50,7 +50,7 @@ const MainView: React.FC = () => {
   /* Footer properties */
   const footerProps = {
     icon: <FontAwesomeIcon icon={faBullhorn} size="lg" />,
-    msg: "Ejemplo: Alexa, me siento solo",
+    msg: "Hello Alexa, my name is Ana",
   };
 
   return (

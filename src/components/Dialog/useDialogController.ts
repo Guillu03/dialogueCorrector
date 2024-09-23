@@ -100,7 +100,11 @@ const useDialogController = () => {
     printDebug(`+++ INTENT TYPE => ${intentType} `);
 
     if (intentType === "conversation-intent") {
-      await handleAnswerToGeneralUserInput(userRequest, messages);
+      if (userRequest.includes("ver correcciones")) {
+        handleSeeCorrectionsOnTouchEvent();
+      } else {
+        await handleAnswerToGeneralUserInput(userRequest, messages);
+      }
     }
 
     dispatch(resetUserSpeechData());

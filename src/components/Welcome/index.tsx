@@ -7,6 +7,7 @@
  *                                                                                                          *
  ************************************************************************************************************/
 import Button from "../../shared/components/Button";
+import useWelcomeController from "./useWelcomeController";
 import "./welcome.css";
 
 /**
@@ -15,13 +16,15 @@ import "./welcome.css";
  * @returns StartAppView
  */
 const StartAppView: React.FC = () => {
+  useWelcomeController();
+
   return (
     <>
       <div className="container-fluid">
         <div className="container-menu-start-app-view">
           <div className="grid-container-start-app-view">
             <div className="item-logo-start-app-view">
-              Corrector diálogo v11
+              Corrector diálogo v12
             </div>
             <div className="item-button-start-app-view">
               <Button
