@@ -21,7 +21,7 @@ const StartAppView: React.FC = () => {
         <div className="container-menu-start-app-view">
           <div className="grid-container-start-app-view">
             <div className="item-logo-start-app-view">
-              Corrector diálogo v10.8
+              Corrector diálogo v11
             </div>
             <div className="item-button-start-app-view">
               <Button
