@@ -20,6 +20,7 @@ import { OpenAIRootState } from "../../shared/redux/slices/openAISlice";
 import useSpeechResponse from "./hooks/useSpeechResponse";
 import useLanguage from "../../shared/hooks/useLanguage";
 import { LanguageRootState } from "../../shared/redux/slices/languageSlice";
+import { useNavigate } from "react-router-dom";
 
 const useDialogController = () => {
   // Local variables
@@ -56,6 +57,7 @@ const useDialogController = () => {
 
   // Custom and React Hooks
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { handleAnswerToGeneralUserInput } = useUserGeneralInput();
   const { speechResponseToUserRequest } = useSpeechResponse();
   const { getGreetingsWithSSML } = useLanguage();
@@ -102,6 +104,8 @@ const useDialogController = () => {
     if (intentType === "conversation-intent") {
       if (userRequest.includes("ver correcciones")) {
         handleSeeCorrectionsOnTouchEvent();
+      } else if (userRequest.includes("volver a pantalla principal")) {
+        navigate("/");
       } else {
         await handleAnswerToGeneralUserInput(userRequest, messages);
       }

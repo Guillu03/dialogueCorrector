@@ -13,6 +13,8 @@ const useCorrectionsView = (
   setSeeCorrectionsEnabled: any
 ) => {
   //Local variables
+  const [messagesWithoutSystemEntries, setMessagesWithoutSystemEntries] =
+    useState<OpenAIMessageDTO[]>([]);
   const [corrections, setCorrections] = useState<any>();
   const [messagesSufficientForCorrection, setMessagesSufficientForCorrection] =
     useState<boolean>(false);
@@ -114,9 +116,22 @@ const useCorrectionsView = (
 
   const getNumberOfMessagesWithRoleUser = (_messages: OpenAIMessageDTO[]) => {
     // Filtrar mensajes que tienen role "user".
-    const userMessages = _messages.filter((message) => message.role === "user");
-    return userMessages;
+    return _messages.filter((message) => message.role === "user");
   };
+
+  const filterMessagesArray = (_messages: OpenAIMessageDTO[]) => {
+    return _messages.filter((message) => message.role !== "system");
+  };
+
+  useEffect(() => {
+    if (messages.length > 0) {
+      const filteredMessages: OpenAIMessageDTO[] =
+        filterMessagesArray(messages);
+      setMessagesWithoutSystemEntries([...filteredMessages]);
+
+      printDebug("INSIDE useEFFECt - filteredMessages => " + filteredMessages);
+    }
+  }, [messages]);
 
   useEffect(() => {
     // Función de limpieza para ejecutar al desmontar el componente
@@ -129,6 +144,7 @@ const useCorrectionsView = (
   }, [setSeeCorrectionsEnabled]);
 
   return {
+    messagesWithoutSystemEntries,
     corrections,
     messagesSufficientForCorrection,
   };

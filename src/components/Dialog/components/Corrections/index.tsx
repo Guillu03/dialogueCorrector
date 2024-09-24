@@ -30,10 +30,11 @@ const CorrectionsView: React.FC<CorrectionsViewProps> = ({
   setSeeCorrectionsEnabled,
 }) => {
   /* View Controller */
-  const { messagesSufficientForCorrection, corrections } = useCorrectionsView(
-    messages,
-    setSeeCorrectionsEnabled
-  );
+  const {
+    messagesWithoutSystemEntries,
+    messagesSufficientForCorrection,
+    corrections,
+  } = useCorrectionsView(messages, setSeeCorrectionsEnabled);
 
   return (
     <>
@@ -62,7 +63,7 @@ const CorrectionsView: React.FC<CorrectionsViewProps> = ({
                 <hr className="divider" />
                 <div className="item-list">
                   <h2 className="header">Diálogo</h2>
-                  {messages.map((message, index) => (
+                  {messagesWithoutSystemEntries.map((message, index) => (
                     <div key={index} className="item-message">
                       <p className="paragraph">
                         <strong>Rol: </strong>

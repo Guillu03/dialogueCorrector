@@ -195,7 +195,7 @@ const useMessages = () => {
 
     const systemMessageContent = `Voy a enviarte un resumen de la última conversación que has mantenido con un usuario. 
       Necesito que analices dicho resumen y que respondas a las peticiones del usuario teniendo en cuenta el contexto de la conversación extraído del resumen. 
-      Además, quiero que actúes como un psicólogo que está conversando con un usuario. El resumen es el siguiente: ${artificialIntelligenceSummary}`;
+      El resumen es el siguiente: ${artificialIntelligenceSummary}`;
     await addSystemMessageAndUpdateTokens(systemMessageContent, _messages);
 
     resetContextTokensTotal();
