@@ -77,13 +77,14 @@ const useMessages = () => {
         _messages
       );
     } else if (!isSystemMessage && updateTokens) {
-      addSystemMessageAndUpdateTokens(
+      /*addSystemMessageWithoutUpdateTokens(
         "Deberás devolver una respuesta que tenga una longitud comprendida entre los 0 y los 300 carácteres",
         _messages
       );
+      */
       await addUserMessageAndUpdateTokens(messageContent, _messages);
 
-      artificialIntelligenceResponse = await askGPT(_messages);
+      artificialIntelligenceResponse = await askGPT(_messages, 75);
 
       if (userEmotion) {
         artificialIntelligenceResponse = `${artificialIntelligenceResponse} 

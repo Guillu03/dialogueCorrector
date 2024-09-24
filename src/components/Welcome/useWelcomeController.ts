@@ -27,10 +27,10 @@ const useWelcomeController = () => {
   const age: number = 30;
   const selectedLanguage: number = 0; // Idioma inglés
   const selectedLevel: LevelType = {
-    key: "B2",
-    name: "Intermedio Alto",
+    key: "C1",
+    name: "Avanzado Alto",
     description:
-      "Comprensión de ideas principales en textos complejos y capacidad para interactuar fluidamente",
+      "Capacidad de expresarse con fluidez y precisión en temas complejos",
   };
   const selectedTopic: TopicType = {
     key: 0,
