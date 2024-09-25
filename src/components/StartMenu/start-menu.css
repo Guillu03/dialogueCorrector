@@ -52,33 +52,33 @@
 .header {
   margin-bottom: 30px;
   font-weight: bold;
-  font-size: 1.3rem;
+  font-size: 1.7rem;
 }
 
 .label {
   font-weight: bold;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
 .select {
-  font-size: 1.1rem;
+  font-size: 1.5rem;
 }
 
 .option {
-  font-size: 1.1rem;
+  font-size: 1.5rem;
 }
 
 @media (min-width: 1024px) {
-  .label,
-  .select {
-    font-size: 1.5rem;
+  .header {
+    font-size: 2.3rem;
   }
 
-  .header {
+  .label,
+  .select {
     font-size: 2rem;
   }
 
   .option {
-    font-size: 1.3rem;
+    font-size: 1.8rem;
   }
 }

@@ -49,28 +49,28 @@
 
 .header {
   font-weight: bold;
-  font-size: 1.8rem;
+  font-size: 2rem;
 }
 
 .subheader {
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.8rem;
 }
 
 .paragraph {
-  font-size: 1.2rem;
+  font-size: 1.5rem;
 }
 
 @media (min-width: 1024px) {
   .header {
-    font-size: 2.3rem;
+    font-size: 2.5rem;
   }
 
   .subheader {
-    font-size: 2rem;
+    font-size: 2.2rem;
   }
 
   .paragraph {
-    font-size: 1.7rem;
+    font-size: 2rem;
   }
 }

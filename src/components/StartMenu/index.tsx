@@ -63,7 +63,7 @@ const StartMenuView: React.FC = () => {
                 </h5>
                 <Row>
                   <Col
-                    xs={2}
+                    xs={3}
                     className="label"
                     style={{
                       display: "flex",
@@ -89,7 +89,7 @@ const StartMenuView: React.FC = () => {
                 <br />
                 <Row>
                   <Col
-                    xs={2}
+                    xs={3}
                     className="label"
                     style={{
                       display: "flex",
@@ -121,7 +121,7 @@ const StartMenuView: React.FC = () => {
                 <br />
                 <Row>
                   <Col
-                    xs={2}
+                    xs={3}
                     className="label"
                     style={{
                       display: "flex",
@@ -157,7 +157,7 @@ const StartMenuView: React.FC = () => {
                 <br />
                 <Row>
                   <Col
-                    xs={2}
+                    xs={3}
                     className="label"
                     style={{
                       display: "flex",
@@ -195,7 +195,7 @@ const StartMenuView: React.FC = () => {
                 <br />
                 <Row>
                   <Col
-                    xs={2}
+                    xs={3}
                     className="label"
                     style={{
                       display: "flex",
