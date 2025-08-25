@@ -1,11 +1,3 @@
-/************************************************************************************************************
- *                                                                                                          *
- * File: useFirebaseDBModel.tsx                                                                             *
- * Author: Adnana Catrinel Dragut                                                                           *
- * Description: Custom hook used for managing the content of users from firebase firestore database         *
- * Version: 1.0                                                                                             *
- *                                                                                                          *
- ************************************************************************************************************/
 import { useSelector } from "react-redux";
 import { useContext } from "react";
 import {
@@ -28,13 +20,11 @@ const useFirebaseDBModel = () => {
   );
 
   /* App Context Data */
-  const { getFirebaseDb } = useContext(FirebaseContext);
+  const { getFirestoreDb } = useContext(FirebaseContext);
   const { printDebug } = useContext(AlexaContext);
 
   /**
    * Add a new user to the Firebase database
-   *
-   * @param _user
    */
   const addUserToFirebaseDB = async (
     _user: UserDTO
@@ -42,7 +32,7 @@ const useFirebaseDBModel = () => {
     let docRef: DocumentReference<DocumentData, DocumentData> | null = null;
 
     try {
-      const db = await getFirebaseDb();
+      const db = await getFirestoreDb(); // Llama a la función de Firestore
 
       if (db) {
         const usersCollection = collection(db, "users");
@@ -62,15 +52,13 @@ const useFirebaseDBModel = () => {
   };
 
   /**
-   * Add a new user to the Firebase database
-   *
-   * @param _user
+   * Add a new message to an existing user document in Firebase
    */
   const addUserAndAIMessageToFirebaseDB = async (
     _message: OpenAIMessageDTO
   ) => {
     try {
-      const db = await getFirebaseDb();
+      const db = await getFirestoreDb();
 
       if (db && userDocRef) {
         await updateDoc(userDocRef, {
@@ -78,12 +66,12 @@ const useFirebaseDBModel = () => {
         });
       } else {
         throw new Error(
-          `Failed adding user answers to initial questionnaire to Firebase collection. DETAILS: Could not get database instance.`
+          `Failed adding message. DETAILS: Could not get database instance or userDocRef is null.`
         );
       }
     } catch (error) {
       throw new Error(
-        `Failed adding user answers to initial questionnaire to Firebase collection. DETAILS: ${error}`
+        `Failed adding message to Firebase collection. DETAILS: ${error}`
       );
     }
   };

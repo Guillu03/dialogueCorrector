@@ -9,12 +9,11 @@ import routes from "./routes.json";
 import MainView from "./components/Main/index";
 import WelcomeView from "./components/Welcome/index";
 import DebugView from "./components/Debug";
+import StartMenuView from "./components/StartMenu";
 
 // Import Controller
 import useAlexaWrapper from "./shared/hooks/useAlexaWrapper";
 import useFirebase from "./api/firebase/useFirebase";
-import StartMenuView from "./components/StartMenu";
-import CorrectionsView from "./components/Dialog/components/Corrections";
 
 // Export Context
 export const FirebaseContext = React.createContext<any>({});
@@ -22,7 +21,7 @@ export const AlexaContext = React.createContext<any>({});
 
 function App() {
   /* Custom hooks */
-  const { getFirebaseDb } = useFirebase();
+  const { getFirestoreDb, getRealtimeDb } = useFirebase(); // Obtenemos las dos funciones
   const {
     debugMessages,
     printDebug,
@@ -34,7 +33,8 @@ function App() {
   return (
     <>
       <FirebaseContext.Provider
-        value={{ getFirebaseDb }} // Global functions to all app's components
+        // Pasamos ambas funciones en el value del provider
+        value={{ getFirestoreDb, getRealtimeDb }} 
       >
         <AlexaContext.Provider
           value={{
@@ -43,7 +43,7 @@ function App() {
             sendLogToAlexa,
             sendTextToAlexa,
             resetDebugMessages,
-          }} // Global functions to all app's components
+          }}
         >
           <BrowserRouter basename={routes.BASE_ROUTE}>
             <Routes>

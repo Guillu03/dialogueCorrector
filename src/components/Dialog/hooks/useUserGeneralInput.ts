@@ -4,12 +4,14 @@ import { useContext } from "react";
 import { AlexaContext } from "../../../App";
 import useSpeechResponse from "./useSpeechResponse";
 import useUserEmotionalAnalysis from "./useUserEmotionalAnalysis";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import useLanguage from "../../../shared/hooks/useLanguage";
 import { LanguageRootState } from "../../../shared/redux/slices/languageSlice";
 import { UserDBRootState } from "../../../shared/redux/slices/userDBSlice";
 import { LevelType } from "../../../shared/constants/levels";
 import { TopicType } from "../../../shared/constants/topics";
+import { EnvironmentRootState, setHighHumidityAlert, setHighTemperatureAlert, setLowHumidityAlert, setMq135Alert, setMq138Alert, setMq2Alert, setMq3Alert, setMq7Alert } from "../../../shared/redux/slices/environmentSlice";
+import useOpenAPI from "../../../api/open-ai/useOpenAI";
 
 const useUserGeneralInput = () => {
   // Constants
@@ -43,6 +45,8 @@ const useUserGeneralInput = () => {
   const topicObject = useSelector(
     (state: LanguageRootState) => state.languageState.languageData.topicObject
   );
+  const { askGPT } = useOpenAPI();
+  const dispatch = useDispatch();
 
   // Custom and React Hooks
   const { speechResponseToUserRequest } = useSpeechResponse();
@@ -55,18 +59,111 @@ const useUserGeneralInput = () => {
     setOpenAIMessages,
   } = useMessages();
 
+  const { isHighTemperatureAlertActive, isHighHumidityAlertActive, isLowHumidityAlertActive } = useSelector((state: EnvironmentRootState) => state.environmentState);
+  const alerts = useSelector((state: EnvironmentRootState) => state.environmentState);
   // App Context Data
   const { printDebug } = useContext(AlexaContext);
+
+  // const handleAnswerToGeneralUserInput = async (
+  //   _userRequest: string,
+  //   _messages: OpenAIMessageDTO[]
+  // ) => {
+  //   const artificialIntelligenceResponse = await getResponseToUserRequest(
+  //     _userRequest,
+  //     _messages
+  //   );
+  //   speechResponseToUserRequest(artificialIntelligenceResponse);
+  // };
 
   const handleAnswerToGeneralUserInput = async (
     _userRequest: string,
     _messages: OpenAIMessageDTO[]
   ) => {
-    const artificialIntelligenceResponse = await getResponseToUserRequest(
-      _userRequest,
-      _messages
-    );
-    speechResponseToUserRequest(artificialIntelligenceResponse);
+    let adviceParts: string[] = [];
+    let alertsToReset: any[] = []; 
+
+    if (isHighTemperatureAlertActive) {
+      printDebug("Alerta de temperatura alta detectada. Generando respuesta combinada.");
+
+      const advicePrompt = "Dame un consejo muy conciso y claro sobre qué hacer si la temperatura ambiente es superior a 26 grados Celsius.";
+      try{
+        const temperatureAdvice = await askGPT([{ role: "user", content: advicePrompt }]);
+        adviceParts.push(temperatureAdvice);
+        printDebug(`Consejo de temperatura obtenido: ${temperatureAdvice}`);
+      }
+      catch(error)
+      {
+        printDebug(`Error al obtener consejo de temperatura: ${error}`);
+        adviceParts.push("He detectado que la temperatura es alta, pero he tenido un problema al generar un consejo. Por favor, ventila la habitación.");
+      }
+
+      alertsToReset.push(setHighTemperatureAlert(false));
+    } 
+
+    if (isHighHumidityAlertActive || isLowHumidityAlertActive) {
+        let humidityPrompt = "";
+        let fallbackMessage = "";
+
+        if (isHighHumidityAlertActive) {
+            printDebug("Alerta de humedad alta detectada. Generando consejo.");
+            humidityPrompt = "La humedad es demasiado alta dentro de la habitación, lo que supone un riesgo sanitario y de desarrollo de moho. Ahora, dame un consejo muy conciso y claro sobre qué hacer en esta situación.";
+            fallbackMessage = "He detectado que la humedad es muy alta, lo cual puede ser perjudicial. He tenido un problema al generar un consejo, pero te recomiendo ventilar bien.";
+            alertsToReset.push(setHighHumidityAlert(false));
+        } else {
+            printDebug("Alerta de humedad baja detectada. Generando consejo.");
+            humidityPrompt = "La humedad es demasiado baja en la habitación. Ahora, dame un consejo muy conciso y claro sobre qué hacer para aumentarla.";
+            fallbackMessage = "He detectado que la humedad es muy baja. Esto puede causar sequedad. No he podido generar un consejo, pero usar un humidificador podría ayudar.";
+            alertsToReset.push(setLowHumidityAlert(false));
+        }
+        
+        try {
+            const humidityAdvice = await askGPT([{ role: "user", content: humidityPrompt }]);
+            adviceParts.push(humidityAdvice);
+            printDebug(`Consejo de humedad obtenido: ${humidityAdvice}`);
+        } catch(error) {
+            printDebug(`Error al obtener consejo de humedad: ${error}`);
+            adviceParts.push(fallbackMessage);
+        }
+    }
+
+    if (alerts.isMq2AlertActive) {
+        adviceParts.push("Presencia peligrosa de humo, butano o propano");
+        alertsToReset.push(setMq2Alert(false));
+    }
+    if (alerts.isMq3AlertActive) {
+        adviceParts.push("Presencia peligrosa de vapores de alcohol");
+        alertsToReset.push(setMq3Alert(false));
+    }
+    if (alerts.isMq7AlertActive) {
+        adviceParts.push("Presencia excesiva de monóxido de carbono");
+        alertsToReset.push(setMq7Alert(false));
+    }
+    if (alerts.isMq135AlertActive) {
+        adviceParts.push("Presencia peligrosa de aire contaminado");
+        alertsToReset.push(setMq135Alert(false));
+    }
+    if (alerts.isMq138AlertActive) {
+        adviceParts.push("Presencia peligrosa de vapores de productos químicos");
+        alertsToReset.push(setMq138Alert(false));
+    }
+
+    const conversationalResponse = await getResponseToUserRequest(_userRequest, _messages);
+
+    let finalResponse = "";
+    if (adviceParts.length > 0) {
+        finalResponse = adviceParts.join(" Además, ");
+        finalResponse += `. Por otro lado, y en cuanto a lo que mencionabas, ${conversationalResponse}`;
+    } else {
+        finalResponse = conversationalResponse;
+    }
+
+    printDebug(`Respuesta final concatenada: ${finalResponse}`);
+
+    await speechResponseToUserRequest(finalResponse);
+
+    if (alertsToReset.length > 0) {
+        alertsToReset.forEach(action => dispatch(action));
+    }
   };
 
   const getResponseToUserRequest = async (

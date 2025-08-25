@@ -10,6 +10,7 @@ import languageSlice from "./slices/languageSlice";
 import openAISlice from "./slices/openAISlice";
 import userDBSlice from "./slices/userDBSlice";
 import voiceSlice from "./slices/voiceSlice";
+import environmentSlice from "./slices/environmentSlice"; 
 import { configureStore } from "@reduxjs/toolkit";
 
 const defaultMiddlewareConfig = {
@@ -28,6 +29,7 @@ export const store = configureStore({
     openAIState: openAISlice,
     userDBState: userDBSlice,
     languageState: languageSlice,
+    environmentState: environmentSlice,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware(defaultMiddlewareConfig),

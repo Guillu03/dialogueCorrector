@@ -7,6 +7,10 @@ import {
 } from "../../../shared/redux/slices/voiceSlice";
 import useLanguage from "../../../shared/hooks/useLanguage";
 import { LanguageRootState } from "../../../shared/redux/slices/languageSlice";
+import {
+  EnvironmentRootState,
+  setHighTemperatureAlert,
+} from "../../../shared/redux/slices/environmentSlice";
 
 const useSpeechResponse = () => {
   // Global variables
@@ -15,6 +19,10 @@ const useSpeechResponse = () => {
   );
   const languageKey = useSelector(
     (state: LanguageRootState) => state.languageState.languageData.languageKey
+  );
+  const isHighTemperatureAlertActive = useSelector(
+    (state: EnvironmentRootState) =>
+      state.environmentState.isHighTemperatureAlertActive
   );
 
   // Custom and React Hooks
@@ -28,7 +36,24 @@ const useSpeechResponse = () => {
     _response: string,
     _otherInfo?: string
   ) => {
-    const formatedResponse = formattingAlexaResponse(_response);
+    let finalResponse = _response;
+
+    // if (isHighTemperatureAlertActive) {
+    //   const warningMessage =
+    //     "La temperatura de tu habitación es demasiado alta, ventila la habitación por favor. Ahora, después de avisarte, para seguir con la conversación... ";
+      
+    //   if (_response) {
+    //     finalResponse = warningMessage + _response;
+    //   }
+      
+    //   printDebug("Añadiendo aviso de temperatura a la respuesta de Alexa.");
+
+    //   dispatch(setHighTemperatureAlert(false));
+      
+    //   dispatch(setLastAlertTimestamp(Date.now()));
+    // }
+
+    const formatedResponse = formattingAlexaResponse(finalResponse);
     await sendTextToAlexa(voiceAPIStatus, formatedResponse, _otherInfo);
     dispatch(setProcessingUserRequest(false));
   };

@@ -1,45 +1,27 @@
-/************************************************************************************************************
- *                                                                                                          *
- * File: index.tsx                                                                                          *
- * Author: Adnana Catrinel Dragut                                                                           *
- * Description: Dialog View Components                                                                      *
- * Version: 1.1                                                                                             *
- *                                                                                                          *
- ************************************************************************************************************/
-import { MAIN_IMAGES } from "../../shared/constants/images";
-import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-
-// Import Styles
-import "./dialog.css";
-
-// Import Components
-import Button from "../../shared/components/Button";
-import useDialogController from "./useDialogController";
-import useTest1 from "./__tests__/useTest";
-import useTest2 from "../../shared/hooks/tests/useTest";
 import CorrectionsView from "./components/Corrections";
 import Speech from "./components/Speech";
+import useDialogController from "./useDialogController";
 
 /**
- * Generic view of a menu
- *
- * @param MenuProps
- * @returns MenuView
+ * Vista principal del diálogo que decide si mostrar la conversación o las correcciones.
  */
 const DialogView = () => {
-  /* View Controller */
   const {
     messages,
     seeCorrectionsEnabled,
     isLoading,
     isSpeechOn,
+    latestTemperature,
+    latestHumidity,
+    latestMq2,
+    latestMq3,
+    latestMq7,
+    latestMq135,
+    latestMq138,
     handleOnTouchStartEvent,
     handleSeeCorrectionsOnTouchEvent,
     setSeeCorretionsEnabled,
   } = useDialogController();
-  //useTest1();
-  //useTest2();
 
   return (
     <>
@@ -52,6 +34,13 @@ const DialogView = () => {
         <Speech
           isLoading={isLoading}
           isSpeechOn={isSpeechOn}
+          latestTemperature={latestTemperature}
+          latestHumidity={latestHumidity} 
+          latestMq2={latestMq2}
+          latestMq3={latestMq3}
+          latestMq7={latestMq7}
+          latestMq135={latestMq135}
+          latestMq138={latestMq138}
           handleOnTouchStartEvent={handleOnTouchStartEvent}
           handleSeeCorrectionsOnTouchEvent={handleSeeCorrectionsOnTouchEvent}
         />
