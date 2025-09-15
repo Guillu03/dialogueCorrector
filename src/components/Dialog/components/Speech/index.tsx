@@ -12,8 +12,10 @@ interface SpeechViewProps {
   latestMq7: number | null;
   latestMq135: number | null;
   latestMq138: number | null;
-  handleOnTouchStartEvent: () => void;
+  handleOnTouchStartEvent: () => void; // Aún se pasa, pero no se usa en el contenedor principal
   handleSeeCorrectionsOnTouchEvent: (enabled: boolean) => void;
+  handleMiEntornoClick: () => void;
+  handleRecomendacionesClick: () => void;
 }
 
 const Speech: React.FC<SpeechViewProps> = ({
@@ -26,42 +28,18 @@ const Speech: React.FC<SpeechViewProps> = ({
   latestMq7,
   latestMq135,
   latestMq138,
-  handleOnTouchStartEvent,
+  handleOnTouchStartEvent, // Ya no se usa directamente en el div principal
   handleSeeCorrectionsOnTouchEvent,
+  handleMiEntornoClick,
+  handleRecomendacionesClick,
 }) => {
   return (
-    <div className="container-fluid" onTouchStart={handleOnTouchStartEvent}>
-      <div className="container-menu">
-        <div className="speech-view-main-layout">
-          <div className="sensors-left-panel">
-            <div className="sensor-display">
-              {latestTemperature !== null
-                ? `🌡️ Temperatura: ${latestTemperature.toFixed(1)} °C`
-                : "Cargando..."}
-            </div>
-            <div className="sensor-display">
-              {latestHumidity !== null
-                ? `💧 Humedad: ${latestHumidity.toFixed(1)} %`
-                : "Cargando..."}
-            </div>
-            <div className="sensor-display">
-              {latestMq2 !== null ? `MQ-2 (Humo): ${latestMq2}` : "Cargando..."}
-            </div>
-            <div className="sensor-display">
-              {latestMq3 !== null ? `MQ-3 (Alcohol): ${latestMq3}` : "Cargando..."}
-            </div>
-            <div className="sensor-display">
-              {latestMq7 !== null ? `MQ-7 (CO): ${latestMq7}` : "Cargando..."}
-            </div>
-            <div className="sensor-display">
-              {latestMq135 !== null ? `MQ-135 (Aire): ${latestMq135}` : "Cargando..."}
-            </div>
-            <div className="sensor-display">
-              {latestMq138 !== null ? `MQ-138 (Químicos): ${latestMq138}` : "Cargando..."}
-            </div>
-          </div>
+    // Se ha eliminado onTouchStart={handleOnTouchStartEvent} de este div principal
+    <div className="container-menu"> 
+      <div className="speech-view-main-layout">
 
-          <div className="main-content-right-panel">
+          {/* Panel izquierdo para el avatar (70% del ancho) */}
+          <div className="main-content-left-panel">
             <div className="avatar-area">
               {isLoading && (
                 <div className="loading-icon-container">
@@ -81,22 +59,65 @@ const Speech: React.FC<SpeechViewProps> = ({
                 />
               </div>
             </div>
+          </div>
 
+          {/* Panel derecho para los botones y sensores (30% del ancho) */}
+          <div className="main-content-right-panel">
+            
+            {/* Sección superior para los botones (20% de la altura) */}
             <div className="button-container">
               <Button
-                id="start"
-                path="/seeCorrections"
-                onClick={handleSeeCorrectionsOnTouchEvent}
+                id="miEntorno"
+                path="/mi-entorno"
+                onClick={handleMiEntornoClick}
                 classStyle="btn-primary item-button"
                 type="button"
               >
-                Ver correcciones
+                Mi entorno
+              </Button>
+              <Button
+                id="recomendaciones"
+                path="/recomendaciones"
+                onClick={handleRecomendacionesClick}
+                classStyle="btn-primary item-button"
+                type="button"
+              >
+                Recomendaciones
               </Button>
             </div>
+
+            {/* Sección inferior para los sensores (80% de la altura) */}
+            <div className="sensors-right-panel">
+              <div className="sensor-display">
+                {latestTemperature !== null
+                  ? `🌡️ Temperatura: ${latestTemperature.toFixed(1)} °C`
+                  : "Cargando..."}
+              </div>
+              <div className="sensor-display">
+                {latestHumidity !== null
+                  ? `💧 Humedad: ${latestHumidity.toFixed(1)} %`
+                  : "Cargando..."}
+              </div>
+              <div className="sensor-display">
+                {latestMq2 !== null ? `MQ-2 (Humo): ${latestMq2}` : "Cargando..."}
+              </div>
+              <div className="sensor-display">
+                {latestMq3 !== null ? `MQ-3 (Alcohol): ${latestMq3}` : "Cargando..."}
+              </div>
+              <div className="sensor-display">
+                {latestMq7 !== null ? `MQ-7 (CO): ${latestMq7}` : "Cargando..."}
+              </div>
+              <div className="sensor-display">
+                {latestMq135 !== null ? `MQ-135 (Aire): ${latestMq135}` : "Cargando..."}
+              </div>
+              <div className="sensor-display">
+                {latestMq138 !== null ? `MQ-138 (Químicos): ${latestMq138}` : "Cargando..."}
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
-    </div>
   );
 };
 export default Speech;

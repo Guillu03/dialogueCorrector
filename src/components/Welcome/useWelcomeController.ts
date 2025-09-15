@@ -25,7 +25,7 @@ import {
 const useWelcomeController = () => {
   const pseudonym: string = "Anónimo";
   const age: number = 30;
-  const selectedLanguage: number = 0; // Idioma inglés
+  const selectedLanguage: number = 1; // Idioma español
   const selectedLevel: LevelType = {
     key: "C1",
     name: "Avanzado Alto",
@@ -34,8 +34,8 @@ const useWelcomeController = () => {
   };
   const selectedTopic: TopicType = {
     key: 0,
-    name: "Aleatorio",
-    description: "Hablar sobre temas seleccionados de manera aleatoria",
+    name: "Consejos ambientales",
+    description: "Monitorear y responder a alertas de sensores en tiempo real además de aconsejar acciones preventivas",
   };
 
   //Global variables
@@ -66,11 +66,11 @@ const useWelcomeController = () => {
     printDebug(`+++ VOICE API STATUS => ${voiceAPIStatus} `);
     printDebug(`+++ INTENT TYPE => ${intentType} `);
 
-    if (intentType === "conversation-intent") {
-      if (userRequest.includes("comenzar")) {
-        handleStartButtonClick();
-      }
-    }
+    // if (intentType === "conversation-intent") {
+    //   if (userRequest.includes("comenzar")) {
+    //     handleStartButtonClick();
+    //   }
+    // }
 
     dispatch(resetUserSpeechData());
   }, [intentType, voiceAPIStatus]);
@@ -115,8 +115,9 @@ const useWelcomeController = () => {
    * Execution of the method on the first rendering and when dependencies upon the handleVoiceAPIRequests function are modified
    */
   useEffect(() => {
-    handleVoiceAPIIntents();
-  }, [handleVoiceAPIIntents]);
+    handleStartButtonClick();
+    // handleVoiceAPIIntents();
+  }, []);
 };
 
 export default useWelcomeController;

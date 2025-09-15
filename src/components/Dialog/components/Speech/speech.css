@@ -1,10 +1,10 @@
 /************************************************************************************************************
- *                                                                                                          *
- * File: main.module.css                                                                                    *
- * Author: Adnana Catrinel Dragut                                                                           *
- * Description: CSS with the style of the Main View                                                         *
- * Version: 1.1                                                                                             *
- *                                                                                                          *
+ * *
+ * File: main.module.css *
+ * Author: Adnana Catrinel Dragut *
+ * Description: CSS with the style of the Main View *
+ * Version: 1.1 *
+ * *
  ************************************************************************************************************/
 
 .container-menu {
@@ -12,6 +12,7 @@
   padding: 1em;
   display: flex;
   margin-top: 45px;
+  width: calc(100vw - 160px);
 }
 .grid-container {
   display: grid;
@@ -126,65 +127,79 @@
 }
 
 
+/* ====== Bloque de estilos para la vista de diálogo (speech-view-main-layout) ====== */
+/* Se ha copiado la versión más reciente y adaptable de speech.css aquí */
 
-        .speech-view-main-layout {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: flex-start;
+/* ====== Reset básico ====== */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+/* Asegura que estos contenedores ocupen la altura completa del viewport disponible */
+/* .container-fluid,
+.container-menu {
+  height: 100%;
+} */
+
+/* ====== Layout principal (70% / 30% siempre) ====== */
+.speech-view-main-layout {
+  display: grid;
+  grid-template-columns: 60% 40%; /* <-- ANCHO: 70 / 30 SIEMPRE */
+  gap: clamp(8px, 1.5vw, 24px); /* Espaciado adaptable */
   width: 100%;
-  gap: 30px;
+  max-width: 100%;
+  height: 100%; /* Ahora ajustado a la altura de .container-menu */
+  padding: clamp(6px, 1vw, 16px);
 }
 
-.sensors-left-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  flex-shrink: 0;
-  background-color: rgba(0, 0, 0, 0.815);
-  padding: 20px;
-  border-radius: 15px;
-}
-
-.sensor-display {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-  border-radius: 10px;
-  font-size: 1rem;
-  text-align: left;
-  width: 240px;
-}
-
+/* Importante para que el contenido no fuerce overflow del grid */
+.main-content-left-panel,
 .main-content-right-panel {
+  min-width: 0; /* Permite que el contenido se encoja horizontalmente */
+  min-height: 0; /* Permite que el contenido se encoja verticalmente */
+}
+
+/* ====== Panel izquierdo (robot/avatar - 70% de ancho) ====== */
+.main-content-left-panel {
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-grow: 1;
   height: 100%;
+  min-width: 0; /* Esencial para evitar desbordamiento */
 }
 
 .avatar-area {
   display: flex;
   align-items: center;
   justify-content: center;
-  flex-grow: 1;
+  gap: clamp(6px, 1vw, 16px);
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
 .loading-icon-container {
-  margin-right: 20px;
+  margin-right: 0;
 }
 
 .loading-icon {
-  max-width: 80px;
+  width: clamp(28px, 5vw, 80px);
   height: auto;
 }
 
 .avatar-container img {
-  max-width: 350px;
+  width: clamp(120px, 22vw, 420px); /* Escala con viewport manteniendo 70/30 */
   height: auto;
   border-radius: 50%;
   transition: box-shadow 0.3s ease-in-out;
+  display: block;
 }
 
 .speaking-glow {
@@ -204,15 +219,176 @@
   }
 }
 
+/* ====== Panel derecho (30% de ancho) ====== */
+.main-content-right-panel {
+  display: flex;
+  flex-direction: column; /* Usa flexbox para controlar la distribución vertical */
+  height: 100%;
+  gap: clamp(6px, 1vw, 12px);
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Botones (arriba) */
 .button-container {
-  padding-top: 20px;
-  width: 50%;
-  max-width: 400px;
+  display: flex;
+  flex-direction: column; /* Por defecto apila los botones verticalmente */
+  gap: clamp(4px, 1vw, 8px); /* Espaciado adaptable */
+  align-items: stretch;
+  flex-shrink: 0; /* Evita que el contenedor de botones se encoja más de lo necesario */
+  min-height: clamp(50px, 10vh, 120px); /* Altura mínima para botones */
 }
 
 .item-button {
   width: 100%;
-  font-size: 1.5rem !important;
-  font-weight: bold !important;
-  padding: 15px;
+  font-size: clamp(0.7rem, 1.2vw, 1.6rem) !important;
+  font-weight: 700 !important;
+  padding: clamp(6px, 1vw, 16px);
+  min-height: clamp(25px, 4.5vh, 60px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* Sensores (abajo) - Usa el ESPACIO RESTANTE en un grid 3xN */
+.sensors-right-panel {
+  flex: 1; /* Ocupa todo el espacio vertical sobrante */
+  display: grid; /* CAMBIADO: A grid para 3 columnas */
+  grid-template-columns: repeat(3, 1fr); /* 3 columnas de igual ancho */
+  gap: clamp(2px, 0.5vw, 5px); /* Espaciado entre celdas del grid reducido */
+  background-color: rgba(0, 0, 0, 0.815);
+  padding: clamp(4px, 0.8vw, 15px); /* Padding del contenedor de sensores reducido */
+  border-radius: 15px;
+  overflow: hidden; /* **Sin scroll, todo debe caber** */
+  min-height: 0; /* Esencial para que el grid funcione con overflow: hidden */
+}
+
+.sensor-display {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-radius: 8px; /* Radio de borde ligeramente más pequeño */
+  aspect-ratio: 2 / 1; /* Hace que las cajas sean cuadradas */
+  display: flex;
+  flex-direction: column; /* Para apilar identificador y valor (si HTML lo permite) */
+  justify-content: center; /* Centra el contenido verticalmente */
+  align-items: center; /* Centra el contenido horizontalmente */
+  text-align: center; /* Asegura que el texto esté centrado */
+  font-size: clamp(0.6rem, 0.6vh, 0.8rem); /* Fuente de sensores muy pequeña para que quepa todo */
+  padding: clamp(2px, 0.4vw, 6px); /* Padding interno de cada sensor muy reducido */
+  min-width: 0; /* Permite encoger el contenido dentro de la celda */
+  overflow: hidden; /* Oculta el texto que se desborde */
+  text-overflow: ellipsis; /* Añade puntos suspensivos */
+  white-space: normal; /* Permite que el texto se ajuste en varias líneas si es necesario */
+  word-break: break-word; /* Rompe palabras largas si no caben */
+}
+
+
+/* ====== Media Queries para ajustes finos (manteniendo 70/30) ====== */
+
+/* Móviles pequeños (ej: < 768px, como la imagen de 698x430) */
+@media (max-width: 768px) {
+  .speech-view-main-layout {
+    gap: 6px;
+    padding: 4px;
+  }
+
+  .avatar-container img {
+    width: clamp(80px, 15vw, 180px); /* Avatar más pequeño */
+  }
+
+  .loading-icon {
+    width: clamp(18px, 3vw, 40px);
+  }
+
+  .button-container {
+    flex-direction: row; /* En pantallas pequeñas, los botones se ponen en fila */
+    flex-wrap: wrap; /* Permite que los botones salten de línea si no caben dos */
+    justify-content: space-around; /* Distribuye los botones horizontalmente */
+    gap: 4px;
+    min-height: clamp(35px, 6vh, 80px); /* Ajusta altura mínima del contenedor de botones */
+  }
+
+  .item-button {
+    font-size: clamp(0.5rem, 2.5vw, 0.9rem) !important; /* Fuente muy pequeña */
+    padding: clamp(3px, 1.5vw, 8px);
+    width: 48%; /* Dos botones por fila (aproximadamente) */
+    min-height: clamp(20px, 3.5vh, 40px);
+  }
+
+  .sensors-right-panel {
+    gap: 4px;
+    padding: 6px;
+  }
+
+  .sensor-display {
+    font-size: clamp(0.45rem, 0.5vh, 0.75rem); /* Fuente extremadamente pequeña para que quepa */
+    padding: clamp(2px, 0.5vw, 5px);
+  }
+}
+
+/* Nuevo Media Query para pantallas de 993px a 1599px (incluye 1280x800) */
+@media (min-width: 993px) and (max-width: 1599px) {
+  .speech-view-main-layout {
+    gap: clamp(10px, 1.8vw, 20px);
+    padding: clamp(8px, 1.5vw, 16px);
+  }
+
+  .avatar-container img {
+    width: clamp(180px, 20vw, 360px); /* Avatar más grande */
+  }
+
+  .loading-icon {
+    width: clamp(35px, 4vw, 60px);
+  }
+
+  .button-container {
+    gap: clamp(8px, 1.5vw, 15px);
+    min-height: clamp(70px, 12vh, 150px); /* Altura mínima del contenedor de botones más grande */
+  }
+
+  .item-button {
+    font-size: clamp(0.9rem, 1.5vw, 1.5rem) !important; /* Fuente de botones más grande */
+    padding: clamp(10px, 1.8vw, 20px);
+    min-height: clamp(35px, 6vh, 70px);
+  }
+
+  .sensors-right-panel {
+    gap: clamp(5px, 1vw, 10px); /* Aumentado el gap para los sensores */
+    padding: clamp(8px, 1.5vw, 20px); /* Aumentado el padding para los sensores */
+  }
+
+  .sensor-display {
+    font-size: clamp(0.7rem, 0.9vh, 1.1rem); /* Fuente de sensores más grande */
+    padding: clamp(5px, 0.9vw, 12px); /* Aumentado el padding interno de cada sensor */
+  }
+}
+
+/* Pantallas muy grandes: escalar suave sin romper la proporción */
+@media (min-width: 1600px) {
+  .speech-view-main-layout {
+    gap: clamp(12px, 1.8vw, 24px);
+    padding: clamp(10px, 1.2vw, 20px);
+  }
+
+  .avatar-container img {
+    width: clamp(260px, 24vw, 480px);
+  }
+  .item-button {
+    font-size: clamp(1.1rem, 1.2vw, 1.8rem) !important;
+    padding: clamp(10px, 1.2vw, 20px);
+  }
+  .sensor-display {
+    font-size: clamp(0.95rem, 0.9vw, 1.15rem);
+  }
+}
+
+/* Accesibilidad: reducir movimiento si el usuario lo pide */
+@media (prefers-reduced-motion: reduce) {
+  .speaking-glow {
+    animation: none;
+  }
+  .avatar-container img {
+    transition: none;
+  }
 }

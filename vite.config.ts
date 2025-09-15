@@ -11,7 +11,7 @@ export default defineConfig(({ mode }) => {
       "process.env.SOME_KEY": JSON.stringify(env.SOME_KEY),
     },
     plugins: [react(), wasm(), topLevelAwait()],
-    base: "/dialogueCorrector",
+    base: "/dialogueCorrector/",
     build: {
       rollupOptions: {
         output: {

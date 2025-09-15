@@ -30,19 +30,19 @@ const MainView: React.FC = () => {
   /* Navbar properties */
   const navBarProps = {
     navBrand: {
-      name: "Corrector diálogo",
+      name: "Alertas ambientales",
     },
     navBtns: [
-      {
-        name: "back-btn",
-        icon: faArrowLeft,
-        path: "/startMenu",
-      },
-      {
-        name: "debug-btn",
-        icon: faCode,
-        path: "/debug",
-      },
+      // {
+      //   name: "back-btn",
+      //   icon: faArrowLeft,
+      //   path: "/startMenu",
+      // },
+      // {
+      //   name: "debug-btn",
+      //   icon: faCode,
+      //   path: "/debug",
+      // },
     ],
     disableNavButton: false,
   };
@@ -50,7 +50,7 @@ const MainView: React.FC = () => {
   /* Footer properties */
   const footerProps = {
     icon: <FontAwesomeIcon icon={faBullhorn} size="lg" />,
-    msg: "Hello Alexa, my name is Ana",
+    msg: "Alertas ambientales",
   };
 
   return (

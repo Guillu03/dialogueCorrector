@@ -6,7 +6,7 @@
  * Version: 1.0                                                                                             *
  *                                                                                                          *
  ************************************************************************************************************/
-import Button from "../../shared/components/Button";
+// import Button from "../../shared/components/Button";
 import useWelcomeController from "./useWelcomeController";
 import "./welcome.css";
 
@@ -24,9 +24,9 @@ const StartAppView: React.FC = () => {
         <div className="container-menu-start-app-view">
           <div className="grid-container-start-app-view">
             <div className="item-logo-start-app-view">
-              Corrector diálogo v15
+              Alertas ambientales v2
             </div>
-            <div className="item-button-start-app-view">
+            {/* <div className="item-button-start-app-view">
               <Button
                 id="start"
                 path="/startMenu"
@@ -35,7 +35,7 @@ const StartAppView: React.FC = () => {
               >
                 Comenzar
               </Button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

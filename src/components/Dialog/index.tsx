@@ -21,6 +21,8 @@ const DialogView = () => {
     handleOnTouchStartEvent,
     handleSeeCorrectionsOnTouchEvent,
     setSeeCorretionsEnabled,
+    handleMiEntornoClick, // Nuevo manejador
+    handleRecomendacionesClick,
   } = useDialogController();
 
   return (
@@ -43,6 +45,8 @@ const DialogView = () => {
           latestMq138={latestMq138}
           handleOnTouchStartEvent={handleOnTouchStartEvent}
           handleSeeCorrectionsOnTouchEvent={handleSeeCorrectionsOnTouchEvent}
+          handleMiEntornoClick={handleMiEntornoClick} // Pasando el nuevo manejador
+          handleRecomendacionesClick={handleRecomendacionesClick} 
         />
       )}
     </>

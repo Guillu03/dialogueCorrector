@@ -2,17 +2,19 @@ import avatarNotSpeakingIcon from "../../../public/images/main/avatar-not-speaki
 import avatarSpeakingIcon from "../../../public/images/main/avatar-speaking.gif";
 import gifOjosParpadeando from "../../../public/images/main/ojos-parpadeando.gif";
 import robotHablando from "../../../public/images/main/robot-speaking.gif";
+import sensoresHablando from "../../../public/images/main/sensores_alexa_speaking.gif";
+import sensoresIdle from "../../../public/images/main/sensores_alexa_idle.gif";
 import loadingIcon from "../../../public/images/main/load-icon.gif";
 
 const MAIN_IMAGES = {
   avatarNotSpeakingIcon: {
-    imageSrc: robotHablando,
+    imageSrc: sensoresIdle,
     imageAlt: "Ojos en reposo",
     imageAttribution: "GIF local",
     searchLink: "",
   },
   avatarSpeakingIcon: {
-    imageSrc: robotHablando,
+    imageSrc: sensoresHablando,
     imageAlt: "Ojos hablando",
     imageAttribution: "GIF local",
     searchLink: "",

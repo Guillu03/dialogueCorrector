@@ -46,7 +46,7 @@ const ButtonView: React.FC<ButtonProps> = ({
           id={id}
           type="button"
           className={"btn btn-active-color " + classStyle}
-          onTouchEnd={onClick}
+          onClick={onClick}
         >
           {children}
         </button>
@@ -55,7 +55,7 @@ const ButtonView: React.FC<ButtonProps> = ({
           id={id}
           type="button"
           className={"btn btn-active-color " + classStyle}
-          onTouchEnd={() => onClickNavigateToPath(path)}
+          onClick={() => onClickNavigateToPath(path)}
         >
           {children}
         </button>

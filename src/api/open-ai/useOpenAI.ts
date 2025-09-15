@@ -10,7 +10,7 @@ import useExponentialBackoff from "../../shared/hooks/useExponentialBackoff";
 
 // CONSTANTS
 const ENDPOINT = "https://api.openai.com/v1/chat/completions";
-const API_KEY = "sk-proj-bzvBEBksscDhLiCOBayDT3BlbkFJXeknAa8SdhW9S0Mg9Heq";
+const API_KEY = "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";
 
 const useOpenAPI = () => {
   /* App Context Data */

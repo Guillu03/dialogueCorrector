@@ -58,20 +58,27 @@ const useSpeechResponse = () => {
     dispatch(setProcessingUserRequest(false));
   };
 
+  // const formattingAlexaResponse = (_response: string) => {
+  //   const languageObject = getLanguageObjectByKey(languageKey);
+
+  //   printDebug("Voice => " + languageObject?.voice);
+
+  //   let formatedResponse = `<voice name="${
+  //     languageObject?.voice ? languageObject.voice : "Lucia"
+  //   }">
+  //   <lang xml:lang='${languageObject?.code ? languageObject.code : "es-ES"}'>
+  //   `;
+  //   formatedResponse += _response;
+  //   formatedResponse += `</lang></voice>`;
+
+  //   return formatedResponse;
+  // };
   const formattingAlexaResponse = (_response: string) => {
     const languageObject = getLanguageObjectByKey(languageKey);
+    const voice = languageObject?.voice ?? "Lucia";
+    const code  = languageObject?.code  ?? "es-ES";
 
-    printDebug("Voice => " + languageObject?.voice);
-
-    let formatedResponse = `<voice name="${
-      languageObject?.voice ? languageObject.voice : "Lucia"
-    }">
-    <lang xml:lang='${languageObject?.code ? languageObject.code : "es-ES"}'>
-    `;
-    formatedResponse += _response;
-    formatedResponse += `</lang></voice>`;
-
-    return formatedResponse;
+    return `<speak><voice name="${voice}"><lang xml:lang='${code}'>${_response}</lang></voice></speak>`;
   };
 
   return {

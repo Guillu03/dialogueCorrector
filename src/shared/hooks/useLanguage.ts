@@ -10,13 +10,15 @@ const useLanguage = () => {
   const { printDebug } = useContext(AlexaContext);
 
   const getGreetings = (_languageKey: number) => {
-    return greetings[_languageKey];
+    // return greetings[_languageKey];
+    return "";
   };
 
   const getGreetingsWithSSML = (_languageKey: number) => {
-    const message = greetings[_languageKey];
+    // const message = greetings[_languageKey];
 
-    return message;
+    // return message;
+    return "";
   };
 
   const getLanguageObjectByKey = (_languageKey: number) => {
